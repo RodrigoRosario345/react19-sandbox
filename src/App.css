@@ -1,0 +1,6 @@
+body{
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('./assets/images/backgroundDBZ_result.webp');
+    background-size: cover;
+    background-position: right center;
+    background-attachment: fixed;
+}

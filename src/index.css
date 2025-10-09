@@ -1,0 +1,41 @@
+@import "tailwindcss";
+@plugin "flowbite-react/plugin/tailwindcss";
+@source "../.flowbite-react/class-list.json";
+
+@font-face {
+  font-family: "Saiyan Sans";
+  src: url("./assets/fonts/Saiyan-Sans-Left-Oblique.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Saiyan Sans Right";
+  src: url("./assets/fonts/Saiyan-Sans-Right-Oblique.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Saiyan Sans Left";
+  src: url("./assets/fonts/Saiyan-Sans-Left-Oblique.ttf") format("truetype");
+}
+
+@theme {
+  /* Fuentes personalizadas Saiyan Sans */
+  --font-saiyan: "Saiyan Sans", sans-serif;
+  --font-saiyan-right: "Saiyan Sans Right", sans-serif;
+  --font-saiyan-left: "Saiyan Sans Left", sans-serif;
+
+  /* text shadow  */
+  --text-shadow-saiyan: 3px 0, -3px 0, 0 3px, 0 -3px, 2px 2px, -2px -2px,
+    2px -2px, -2px 2px;
+
+  /*grid-columns personalized */
+  --grid-cols-saiyan-cards: repeat(auto-fit, minmax(280px, auto));
+}
+
+/* Ocultar scrollbar en navegadores modernos */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE y Edge */
+  scrollbar-width: none; /* Firefox */
+}

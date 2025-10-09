@@ -1,0 +1,31 @@
+export const ROUTES = {
+  HOME: '/',
+  CHARACTERS: '/characters',
+  PLANETS: '/planets',
+  AUTH: '/auth',
+  // SAGAS: '/sagas',
+  // TRANSFORMATIONS: '/transformations',
+  // BATTLES: '/battles',
+} as const;
+
+
+export const ROUTE_METADATA = {
+  [ROUTES.AUTH]: {
+    title: 'Autenticación',
+    description: 'Test de Iniciar sesión o regístrarse para acceder a contenido exclusivo',
+    name: 'auth',
+  },
+  [ROUTES.CHARACTERS]: {
+    title: 'Personajes',
+    description: 'Explora los personajes del universo Dragon Ball',
+    name: 'characters',
+  },
+  [ROUTES.PLANETS]: {
+    title: 'Planetas',
+    description: 'Descubre los planetas del universo Dragon Ball',
+    name: 'planets',
+  },
+} as const;
+
+export type RouteKey = keyof typeof ROUTES;
+export type RoutePath = typeof ROUTES[RouteKey];
