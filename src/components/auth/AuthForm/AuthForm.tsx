@@ -1,8 +1,11 @@
 import { Button, Input } from "@/components/ui";
 import { SocialButtons } from "../SocialButtons/SocialButtons";
+import type { AuthMode } from "@/types";
 
 interface Props {
-  mode: "login" | "signup";
+  mode: AuthMode
+  ref: React.Ref<HTMLFormElement>;
+  styles: string;
 }
 const AUTH_CONFIG = {
   login: {
@@ -17,12 +20,12 @@ const AUTH_CONFIG = {
   },
 } as const;
 
-export function AuthForm({ mode }: Props) {
+export function AuthForm({ mode, ref, styles }: Props) {
   const config = AUTH_CONFIG[mode];
   const isSignUp = mode === "signup";
 
   return (
-    <form className="flex-1 flex flex-col items-center gap-4">
+    <form className={`flex flex-col justify-evenly items-center absolute inset-0 py-20 w-6/12 ${styles}`} ref={ref}>
       <h1 className="text-4xl font-bold">{config.title}</h1>
       <SocialButtons />
       <p className="text-sm text-gray-500">{config.dividerText}</p>
