@@ -215,8 +215,11 @@ export default function AuthPage() {
 
     // Ejecutar animación según el modo
     if (nextMode === "signup") {
+      console.log(signupFormRef.current);
+      signupFormRef.current.reset(); // Resetear formulario al cambiar a signup
       timeline.play(); // Avanzar a signup
     } else {
+      loginFormRef.current.reset(); // Resetear formulario al cambiar a login
       timeline.reverse(); // Regresar a login
     }
   }, []);
