@@ -3,7 +3,7 @@ import { AppRouter } from "./routes";
 
 function App() {
   return (
-    <main className="h-max p-4 sm:p-6 font-saiyan-right xl:max-w-[1100px] xl:mx-auto">
+    <main className="min-h-screen p-4 sm:p-6 font-saiyan-right xl:max-w-[1100px] xl:mx-auto">
       <AppRouter/>
     </main>
   );

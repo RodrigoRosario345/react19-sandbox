@@ -1,13 +1,14 @@
 import { Button, Input } from "@/components/ui";
 import { SocialButtons } from "../SocialButtons/SocialButtons";
 import type { AuthMode } from "@/types";
-import { useForm } from "react-hook-form";
 import type { User } from "@/interfaces/user.model";
+import type { UseFormReturn } from "react-hook-form";
 
 interface AuthFormProps {
   mode: AuthMode;
   ref: React.Ref<HTMLFormElement>;
   styles: string;
+  useForm: UseFormReturn<User>
 }
 
 const AUTH_CONFIG = {
@@ -23,18 +24,12 @@ const AUTH_CONFIG = {
   },
 } as const;
 
-export function AuthForm({ mode, ref, styles }: AuthFormProps) {
+export function AuthForm({ mode, ref, styles, useForm }: AuthFormProps) {
   const config = AUTH_CONFIG[mode];
   const isSignUp = mode === "signup";
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<User>(
-    { mode: "onBlur" }
-  );
+  const { register, handleSubmit, reset, formState: { errors } } = useForm;
 
+ 
   const onSubmit = (data: User) => {
     console.log("Form data:", data);
     reset();
