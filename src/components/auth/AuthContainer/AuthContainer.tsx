@@ -1,14 +1,13 @@
-import {
-  AuthForm,
-  AuthOverlayContent,
-  AuthOverlayPanel,
-} from "@/components/auth";
+
 import type { User } from "@/interfaces/user.model";
 import type { AuthMode } from "@/types";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { useRef, useCallback } from "react";
 import { useForm } from "react-hook-form";
+import { AuthForm } from "../AuthForm/AuthForm";
+import { AuthOverlayPanel } from "../AuthOverlayPanel/AuthOverlayPanel";
+import { AuthOverlayContent } from "../AuthOverlayPanel/AuthOverlayContent";
 
 gsap.registerPlugin(useGSAP);
 

@@ -3,6 +3,7 @@ export const ROUTES = {
   CHARACTERS: '/characters',
   PLANETS: '/planets',
   AUTH: '/auth',
+  TODO: '/todo',
   // SAGAS: '/sagas',
   // TRANSFORMATIONS: '/transformations',
   // BATTLES: '/battles',
@@ -14,6 +15,11 @@ export const ROUTE_METADATA = {
     title: 'Autenticación',
     description: 'Test de Iniciar sesión o regístrarse para acceder a contenido exclusivo',
     name: 'auth',
+  },
+  [ROUTES.TODO] : {
+    title: 'Lista de Tareas',
+    description: 'Gestiona tu lista de tareas con nuestra aplicación de Todo',
+    name: 'todo',
   },
   [ROUTES.CHARACTERS]: {
     title: 'Personajes',

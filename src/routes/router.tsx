@@ -6,6 +6,7 @@ import { Navigation } from "@/components";
 import HomePage from "@/pages/HomePage";
 import NotFoundPage from "@/pages/NotFoundPage";
 import AuthPage from "@/pages/AuthPage";
+import { TodoPage } from "@/pages/TodoPage";
 
 function AppRouter() {
     return (
@@ -14,6 +15,7 @@ function AppRouter() {
             <Routes>
                 <Route path={ROUTES.AUTH} element={<AuthPage />} />
                 <Route path={ROUTES.HOME} element={<HomePage />} />
+                <Route path={ROUTES.TODO} element={<TodoPage />} />
                 <Route path={ROUTES.CHARACTERS} element={<CharactersPage />} />
                 <Route path={ROUTES.PLANETS} element={<PlanetsPage />} />
                 <Route path="*" element={<NotFoundPage />} />

@@ -14,6 +14,11 @@ const navigationLinks: NavigationLink[] = [
     icon: "🔐",
   },
   {
+    path: ROUTES.TODO,
+    label: ROUTE_METADATA[ROUTES.TODO].title,
+    icon: "📝",
+  },
+  {
     path: ROUTES.CHARACTERS,
     label: ROUTE_METADATA[ROUTES.CHARACTERS].title,
     icon: "👑",
