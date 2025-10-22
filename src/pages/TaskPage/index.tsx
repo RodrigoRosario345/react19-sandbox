@@ -1,5 +1,6 @@
 import { Title } from "@/components";
-import { TaskContainer } from "@/components/todo";
+import { TaskContainer } from "@/components/task_zustand";
+
 
 export function TaskPage() {
     return (
