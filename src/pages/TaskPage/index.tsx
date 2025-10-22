@@ -1,13 +1,13 @@
 import { Title } from "@/components";
-import { TodoContainer } from "@/components/todo";
+import { TaskContainer } from "@/components/todo";
 
-export function TodoPage() {
+export function TaskPage() {
     return (
         <>
             <Title>
                 <span className="text-white">LISTA DE TAREAS</span>
             </Title>
-            <TodoContainer />
+            <TaskContainer />
         </>
     );
 }

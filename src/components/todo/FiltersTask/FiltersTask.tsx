@@ -1,9 +1,9 @@
-import { useTodoStore } from "@/store/todo.store";
+import { useTaskStore } from "@/store/task.store";
 import { Label, Select } from "flowbite-react";
 
-export function FiltersTodo() {
-    const filter = useTodoStore((state) => state.filter);
-    const setFilter = useTodoStore((state) => state.setFilter);
+export function FiltersTask() {
+    const filter = useTaskStore((state) => state.filter);
+    const setFilter = useTaskStore((state) => state.setFilter);
 
     const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setFilter(e.target.value);

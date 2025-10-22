@@ -1,21 +1,21 @@
 import { Button, Label, TextInput } from "flowbite-react";
 import { MdTask } from "react-icons/md";
-import { useTodoStore } from "@/store/todo.store";
+import { useTaskStore } from "@/store/task.store";
 import { useState } from "react";
-import type { Todo } from "@/interfaces/todo.model";
+import type { Task } from "@/interfaces/task.model";
 
 type FormMode = "create" | "edit";
 
-interface FormTodoProps {
+interface FormTaskProps {
     mode: FormMode;
-    todo?: Todo;
+    task?: Task;
     onSuccess?: () => void;
 }
 
-export function FormTodo({ mode, todo, onSuccess }: FormTodoProps) {
-    const addTodo = useTodoStore((state) => state.addTodo);
-    const updateTodo = useTodoStore((state) => state.updateTodo);
-    const [text, setText] = useState(todo?.text ?? "");
+export function FormTask({ mode, task, onSuccess }: FormTaskProps) {
+    const addTask = useTaskStore((state) => state.addTask);
+    const updateTask = useTaskStore((state) => state.updateTask);
+    const [title, setTitle] = useState(task?.title ?? "");
 
     // Determinar si estamos editando
     const isEditing = mode === "edit";
@@ -23,14 +23,14 @@ export function FormTodo({ mode, todo, onSuccess }: FormTodoProps) {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        const trimmedText = text.trim();
-        if (!trimmedText) return;
+        const trimmedTitle = title.trim();
+        if (!trimmedTitle) return;
 
-        if (isEditing && todo) {
-            updateTodo(todo.id, trimmedText);
+        if (isEditing && task) {
+            updateTask(task.id, trimmedTitle);
         } else {
-            addTodo(trimmedText);
-            setText("");
+            addTask(trimmedTitle);
+            setTitle("");
         }
 
         // Llamar callback si existe (ej: cerrar modo edición)
@@ -40,7 +40,7 @@ export function FormTodo({ mode, todo, onSuccess }: FormTodoProps) {
     const handleCancel = () => {
         if (isEditing) {
             // Restaurar texto original
-            setText(todo?.text ?? "");
+            setTitle(task?.title ?? "");
         }
         onSuccess?.();
     };
@@ -56,8 +56,8 @@ export function FormTodo({ mode, todo, onSuccess }: FormTodoProps) {
                     type="text"
                     icon={MdTask}
                     placeholder={isEditing ? "Edit task..." : "New task..."}
-                    value={text}
-                    onChange={(e) => setText(e.target.value)}
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
                     autoFocus={isEditing} 
                     required
                 />
