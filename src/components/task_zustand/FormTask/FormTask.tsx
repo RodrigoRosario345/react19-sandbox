@@ -46,7 +46,7 @@ export function FormTask({ mode, task, onSuccess }: FormTaskProps) {
     };
 
     return (
-        <form className={`flex-1 flex items-end gap-2 `} onSubmit={handleSubmit}>
+        <form className={`flex-4 flex items-end gap-2 `} onSubmit={handleSubmit}>
             <div className="flex-4 flex flex-col gap-2">
                 {!isEditing && <Label htmlFor="task">Add a new task</Label>}
 

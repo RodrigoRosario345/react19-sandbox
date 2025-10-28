@@ -10,12 +10,12 @@ export function FiltersTask() {
     };
 
     return (
-        <div className="flex flex-col gap-2">
+        <div className="flex-1 flex flex-col gap-2">
             <Label htmlFor="filtertodo">Filter tasks</Label>
             <Select
                 value={filter}
-                className="cursor-pointer"
                 id="filtertodo"
+                className="hover:cursor-pointer"
                 onChange={handleSelectChange}
                 required
             >

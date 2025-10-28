@@ -19,6 +19,11 @@ const navigationLinks: NavigationLink[] = [
     icon: "📝",
   },
   {
+    path: ROUTES.MOVIES,
+    label: ROUTE_METADATA[ROUTES.MOVIES].title,
+    icon: "🎬",
+  },
+  {
     path: ROUTES.CHARACTERS,
     label: ROUTE_METADATA[ROUTES.CHARACTERS].title,
     icon: "👑",
