@@ -1,12 +1,14 @@
 import FuzzyText from "@/components/fuzzyText";
+import { InfiniteScroll } from "@/components/InfiniteScroll";
 import { LoadingSpinner } from "@/components/loadingSpinner";
-import type { Tables } from "@/interfaces/database.model";
 import { supabase } from "@/lib/supabase";
+import { carruselInfiniteAnimation } from "@/utils/gsap";
 import type { PostgrestError } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
+import { MovieItem } from "../MovieItem/MovieItem";
+import type { Movie } from "@/interfaces/movie.model";
 
 type ErrorType = PostgrestError | null;
-type Movie = Tables<"movies">;
 
 export function MovieList() {
     const [movies, setMovies] = useState<Movie[]>([]);
@@ -23,7 +25,7 @@ export function MovieList() {
         if (error) {
             setError(error);
         }
-
+        console.log("Movies fetched:", data);
         setMovies(data ?? []);
         setLoading(false);
     };
@@ -33,20 +35,23 @@ export function MovieList() {
 
     return (
         <>
-            {movies.length === 0
-                ? (<p className="text-center text-gray-400">No movies available</p>)
-                : (<>
-                    {
-                        movies.map((movie: Movie) => (
-                            <ul key={movie.id}>
-                                <li>{movie.title}</li>
-                                <li>{movie.description}</li>
-                            </ul>
-                        ))
-                    }
-                </>)
+            {
+                movies.length === 0 ? (
+                    <p className="mt-10 text-center text-2xl text-white">No hay películas disponibles.</p>
+                ) : (
+                    <InfiniteScroll<Movie>
+                        // Datos
+                        items={movies}
+                        renderItem={(item, index) => (
+                            <MovieItem movie={item} key={index} />
+
+                        )}
+                        // Animación
+                        spacing={0.2}
+                        animateFunc={carruselInfiniteAnimation}
+                    />
+                )
             }
         </>
-
     );
 }

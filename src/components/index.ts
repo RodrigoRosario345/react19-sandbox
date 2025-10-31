@@ -1,5 +1,5 @@
 export * from "@/components/loadingSpinner";
-export * from "@/components/card/card";
+export * from "@/components/ui";
 export * from "@/pages/characters";
 export { default } from "@/components/fuzzyText";
 export * from "@/components/Title";

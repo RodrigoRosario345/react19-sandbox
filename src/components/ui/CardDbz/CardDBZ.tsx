@@ -2,7 +2,7 @@ import type { Character } from "@/interfaces/character.model";
 import simboloDBZ from "@/assets/images/simboloDBZ_result.webp";
 
 
-export function Card(props: Character) {
+export function CardDBZ(props: Character) {
   return (
     <div className="relative w-full h-96 bg-radial from-amber-300 to-orange-600 rounded-xl shadow-[5px_5px_5px] shadow-orange-600  overflow-hidden group-hover/cards:not-hover:grayscale-50 transition-all duration-300">
       <div className="h-full bg-black/10 blur-xs ">

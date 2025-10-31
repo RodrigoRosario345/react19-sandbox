@@ -1,5 +1,5 @@
 import { Title } from "@/components";
-import { MovieContainer } from "@/components/movies_supabase";
+import { MovieContainer } from "@/components/MoviesSupabase";
 
 export function MoviePage() {
 

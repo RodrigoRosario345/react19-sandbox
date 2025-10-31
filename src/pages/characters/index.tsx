@@ -3,7 +3,7 @@ import type { Character, RootObject } from "@/interfaces/character.model";
 import getCharacters from "@/services/getCharacters";
 import { useFetch, usePagination } from "@/hooks";
 import { paginationTheme } from "@/themes/pagination.theme";
-import FuzzyText, { Card, LoadingSpinner, Title } from "@/components";
+import FuzzyText, { CardDBZ, LoadingSpinner, Title } from "@/components";
 
 export default function CharactersPage() {
   const { currentPage, goToPage } = usePagination();
@@ -27,7 +27,7 @@ export default function CharactersPage() {
         <>
           <div className="grid grid-cols-(--grid-cols-saiyan-cards) gap-5 justify-items-center-safe mb-4 group/cards">
             {data.items.map((character: Character) => (
-              <Card key={character.id} {...character} />
+              <CardDBZ key={character.id} {...character} />
             ))}
           </div>
           <div className="flex overflow-x-auto sm:justify-center font-sans font-medium">

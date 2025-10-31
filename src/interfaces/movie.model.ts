@@ -1,17 +1,6 @@
-export interface Movie {
-  id: string; 
-  title: string;
-  description: string | null;
-  release_year: number | null;
-  duration_minutes: number | null;
-  rating: number | null; 
-  genre: string | null;
-  director: string | null;
-  poster_url: string | null;
-  trailer_url: string | null;
-  created_at: string; 
-  updated_at: string; 
-}
+import type { Tables } from "./database.model";
+
+export type Movie = Tables<"movies">;
 
 export interface MovieInsert {
   title: string;
