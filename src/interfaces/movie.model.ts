@@ -1,50 +1,30 @@
-import type { Tables } from "./database.model";
+import type { PostgrestError } from "@supabase/supabase-js";
+import type { Tables, TablesInsert, TablesUpdate } from "./database.model";
 
 export type Movie = Tables<"movies">;
 
-export interface MovieInsert {
-  title: string;
-  description?: string | null;
-  release_year?: number | null;
-  duration_minutes?: number | null;
-  rating?: number | null;
-  genre?: string | null;
-  director?: string | null;
-  poster_url?: string | null;
-  trailer_url?: string | null;
-}
+export type MovieInsert = TablesInsert<'movies'>;
 
-export interface MovieUpdate {
-  id: string;
-  title?: string;
-  description?: string | null;
-  release_year?: number | null;
-  duration_minutes?: number | null;
-  rating?: number | null;
-  genre?: string | null;
-  director?: string | null;
-  poster_url?: string | null;
-  trailer_url?: string | null;
-}
+export type MovieUpdate = TablesUpdate<'movies'>;
 
+export type ErrorType = PostgrestError | null;
 
 export interface MovieStore {
   // Estado
   movies: Movie[];
-  selectedMovie: Movie | null;
+  // selectedMovie: Movie | null;
   loading: boolean;
-  error: string | null;
-  filter: string;
+  error: ErrorType;
+  // filter: string;
 
   // Acciones
   fetchMovies: () => Promise<void>;
-  getMovieById: (id: string) => Promise<Movie | null>;
-  addMovie: (movie: MovieInsert) => Promise<void>;
-  updateMovie: (movie: MovieUpdate) => Promise<void>;
-  deleteMovie: (id: string) => Promise<void>;
-  setSelectedMovie: (movie: Movie | null) => void;
-  setFilter: (filter: string) => void;
-  getFilteredMovies: () => Movie[];
+  // getMovieById: (id: string) => Promise<Movie | null>;
+  // addMovie: (movie: MovieInsert) => Promise<void>;
+  // updateMovie: (movie: MovieUpdate) => Promise<void>;
+  // deleteMovie: (id: string) => Promise<void>;
+  // setSelectedMovie: (movie: Movie | null) => void;
+  // setFilter: (filter: string) => void;
 }
 
 

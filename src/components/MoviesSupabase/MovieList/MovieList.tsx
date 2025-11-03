@@ -1,34 +1,22 @@
 import FuzzyText from "@/components/fuzzyText";
 import { InfiniteScroll } from "@/components/InfiniteScroll";
 import { LoadingSpinner } from "@/components/loadingSpinner";
-import { supabase } from "@/lib/supabase";
 import { carruselInfiniteAnimation } from "@/utils/gsap";
-import type { PostgrestError } from "@supabase/supabase-js";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { MovieItem } from "../MovieItem/MovieItem";
-import type { Movie } from "@/interfaces/movie.model";
-
-type ErrorType = PostgrestError | null;
+import type { ErrorType, Movie } from "@/interfaces/movie.model";
+import { useMovieStore } from "@/store/movie.store";
 
 export function MovieList() {
-    const [movies, setMovies] = useState<Movie[]>([]);
-    const [loading, setLoading] = useState<Boolean>(true);
-    const [error, setError] = useState<ErrorType>(null);
-
+    const movies: Movie[] = useMovieStore((state) => state.movies);
+    const loading: boolean = useMovieStore((state) => state.loading);
+    const error: ErrorType = useMovieStore((state) => state.error);
+    const fetchMovies = useMovieStore((state) => state.fetchMovies);
+    
     useEffect(() => {
         fetchMovies();
     }, []);
 
-    const fetchMovies = async () => {
-        const { data, error } = await supabase.from("movies").select("*");
-
-        if (error) {
-            setError(error);
-        }
-        console.log("Movies fetched:", data);
-        setMovies(data ?? []);
-        setLoading(false);
-    };
 
     if (loading) return <LoadingSpinner />;
     if (error) return <FuzzyText>{error.message}</FuzzyText>;
