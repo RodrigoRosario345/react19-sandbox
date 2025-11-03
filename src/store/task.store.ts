@@ -1,7 +1,7 @@
 import type { Task, TaskStore } from "@/interfaces/task.model";
 import { create } from "zustand";
 
-export const useTaskStore = create<TaskStore>((set, get) => ({
+export const useTaskStore = create<TaskStore>((set) => ({
     // Estado inicial
     tasks: [],
     filter: 'all',
@@ -37,7 +37,7 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
             tasks: state.tasks.map((task: Task) =>
                 task.id === id ? { ...task, title: newTitle } : task
             ),
-        })),
+        })), 
 
     setFilter: (filter: string) => set({ filter }),
 
@@ -45,17 +45,4 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
         set((state: TaskStore) => ({
             tasks: state.tasks.filter((task: Task) => !task.completed),
         })),
-
-    getFilteredTasks: () => {
-        const { tasks, filter } = get();
-
-        switch (filter) {
-            case "active":
-                return tasks.filter((task: Task) => !task.completed);
-            case "completed":
-                return tasks.filter((task: Task) => task.completed);
-            default:
-                return tasks;
-        }
-    },
 }));

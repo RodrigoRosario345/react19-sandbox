@@ -17,5 +17,4 @@ export interface TaskStore {
   updateTask: (id: number, newTitle: string) => void;
   setFilter: (filter: string) => void;
   clearCompleted: () => void;
-  getFilteredTasks: () => Task[];
 }
