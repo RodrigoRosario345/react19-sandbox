@@ -16,6 +16,7 @@ export const useMovieStore = create<MovieStore>((set) => ({
         }
 
         set({ movies: data ?? [], loading: false });
-    }
+    },
+  
 }));
 

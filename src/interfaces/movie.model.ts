@@ -1,7 +1,7 @@
 import type { PostgrestError } from "@supabase/supabase-js";
 import type { Tables, TablesInsert, TablesUpdate } from "./database.model";
 
-export type Movie = Tables<"movies">;
+export type Movie = Tables<'movies'>;
 
 export type MovieInsert = TablesInsert<'movies'>;
 
@@ -19,7 +19,6 @@ export interface MovieStore {
 
   // Acciones
   fetchMovies: () => Promise<void>;
-  // getMovieById: (id: string) => Promise<Movie | null>;
   // addMovie: (movie: MovieInsert) => Promise<void>;
   // updateMovie: (movie: MovieUpdate) => Promise<void>;
   // deleteMovie: (id: string) => Promise<void>;

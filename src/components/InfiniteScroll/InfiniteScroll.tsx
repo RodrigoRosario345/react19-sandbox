@@ -26,7 +26,6 @@ export interface InfiniteScrollProps<T> {
 
   // Navegación
   showNavigation?: boolean;
-  navigationClassName?: string;
   navigationButtonClassName?: string;
 
   // Callbacks opcionales
@@ -57,7 +56,6 @@ export function InfiniteScroll<T>({
   itemClassName = "card",
   scrollContainerClassName = "h-[18rem] overflow-y-auto overflow-x-hidden no-scrollbar",
   showNavigation = true,
-  navigationClassName,
   navigationButtonClassName,
   onNext,
   onPrevious,
@@ -99,16 +97,15 @@ export function InfiniteScroll<T>({
               {renderItem(item, index)}
             </div>
           ))}
+          {showNavigation && (
+            <NavigationControls
+              onNext={handleNextClick}
+              onPrevious={handlePreviousClick}
+              buttonClassName={navigationButtonClassName}
+              disabled={!isReady}
+            />
+          )}
         </div>
-        {showNavigation && (
-          <NavigationControls
-            onNext={handleNextClick}
-            onPrevious={handlePreviousClick}
-            className={navigationClassName}
-            buttonClassName={navigationButtonClassName}
-            disabled={!isReady}
-          />
-        )}
         {children}
       </div>
     </div>

@@ -32,7 +32,6 @@ export function MovieList() {
                         items={movies}
                         renderItem={(item, index) => (
                             <MovieItem movie={item} key={index} />
-
                         )}
                         // Animación
                         spacing={0.2}

@@ -32,7 +32,7 @@ export function buildSeamlessLoop<T extends HTMLElement>(
   for (let i = 0; i < totalIterations; i++) {
     const index = i % items.length;
     const time = +(i * spacing).toFixed(1);
-    console.log("Adding animation for item", index, "at time", time);
+    // console.log("Adding animation for item", index, "at time", time);
     rawSequence.add(animateFunc(items[index]), time);
 
     if (i <= items.length) {
@@ -40,7 +40,7 @@ export function buildSeamlessLoop<T extends HTMLElement>(
     }
   }
 
-  console.log({ startTime, loopTime });
+  // console.log({ startTime, loopTime });
   rawSequence.time(startTime);
 
   seamlessLoop
