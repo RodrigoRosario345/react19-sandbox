@@ -1,14 +1,14 @@
 interface ButtonProps {
     type?: "button" | "submit" | "reset";
-    style?: string;
+    className?: string;
     children: React.ReactNode;
-    parentMethod: () => void
+    parentMethod?: () => void
 }
 
 export function Button(
-    { type = "button", style, children, parentMethod }: ButtonProps) {
+    { type = "button", className, children, parentMethod }: ButtonProps) {
     return (
-        <button className={`cursor-pointer transition-all ${style ?? ''}`} type={type} onClick={parentMethod}>
+        <button className={`cursor-pointer transition-all ${className ?? ''}`} type={type} onClick={parentMethod}>
             {children}
         </button>
     );

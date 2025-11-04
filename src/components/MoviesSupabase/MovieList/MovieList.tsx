@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { MovieItem } from "../MovieItem/MovieItem";
 import type { ErrorType, Movie } from "@/interfaces/movie.model";
 import { useMovieStore } from "@/store/movie.store";
+import { MovieItemDetail } from "../MovieItem/MovieItemDetail";
 
 export function MovieList() {
     const movies: Movie[] = useMovieStore((state) => state.movies);
@@ -27,18 +28,20 @@ export function MovieList() {
                 movies.length === 0 ? (
                     <p className="mt-10 text-center text-2xl text-white">No hay películas disponibles.</p>
                 ) : (
-                    <InfiniteScroll<Movie>
-                        // Datos
-                        items={movies}
-                        renderItem={(item, index) => (
-                            <MovieItem movie={item} key={index} />
-                        )}
-                        // Animación
-                        spacing={0.2}
-                        animateFunc={carruselInfiniteAnimation}
-                    >
-                    </InfiniteScroll>
-
+                    <>
+                        <InfiniteScroll<Movie>
+                            // Datos
+                            items={movies}
+                            renderItem={(item, index) => (
+                                <MovieItem movie={item} key={index} />
+                            )}
+                            // Animación
+                            spacing={0.2}
+                            animateFunc={carruselInfiniteAnimation}
+                        >
+                        </InfiniteScroll>
+                        <MovieItemDetail />
+                    </>
                 )
             }
         </>

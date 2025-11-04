@@ -88,7 +88,7 @@ export function AuthForm({ mode, ref, styles, useForm }: AuthFormProps) {
       )}
       <Button
         type="submit"
-        style="bg-violet-800 px-10 py-1.5 rounded-md text-white font-semibold hover:bg-violet-700"
+        className="bg-violet-800 px-10 py-1.5 rounded-md text-white font-semibold hover:bg-violet-700"
       >
         {config.submitText}
       </Button>

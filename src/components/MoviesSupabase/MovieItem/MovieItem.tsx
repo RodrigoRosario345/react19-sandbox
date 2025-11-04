@@ -1,18 +1,16 @@
 import type { Movie } from "@/interfaces/movie.model";
-import { MovieItemDetail } from "./MovieItemDetail";
-import { useState } from "react";
-import { Button } from "@/components/ui";
-import { IoClose } from "react-icons/io5";
+import { useMovieStore } from "@/store/movie.store";
+
 
 interface MovieItemProps {
     movie: Movie;
 }
 
 export function MovieItem({ movie }: MovieItemProps) {
-    const [isDetailVisible, setIsDetailVisible] = useState<boolean>(false);
+    const setSelectedMovie = useMovieStore((state) => state.setSelectedMovie);
 
     const toggleDetail = () => {
-        setIsDetailVisible(!isDetailVisible);
+        setSelectedMovie(movie);
     };
 
     return (
@@ -29,20 +27,6 @@ export function MovieItem({ movie }: MovieItemProps) {
                     alt={movie.title}
                 />
             </div>
-            <MovieItemDetail isDetailVisible={isDetailVisible}>
-                <h3>{movie.title}</h3>
-                <p>{movie.description}</p>
-                <p>{movie.release_year}</p>
-                <p>{movie.duration_minutes}</p>
-                <p>{movie.rating}</p>
-                <p>{movie.genre}</p>
-                <p>{movie.director}</p>
-                <a href={movie.trailer_url!}>Watch Trailer</a>
-                <Button parentMethod={toggleDetail}>
-                    <IoClose />
-                </Button>
-            </MovieItemDetail>
-
         </>
     );
 }

@@ -3,6 +3,7 @@ import { supabase } from "@/lib/supabase";
 import { create } from "zustand";
 
 export const useMovieStore = create<MovieStore>((set) => ({
+    selectedMovie: null,
     movies: [],
     loading: false,
     error: null,
@@ -17,6 +18,6 @@ export const useMovieStore = create<MovieStore>((set) => ({
 
         set({ movies: data ?? [], loading: false });
     },
-  
+    setSelectedMovie: (movie) => set({ selectedMovie: movie }),
 }));
 

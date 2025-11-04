@@ -11,8 +11,8 @@ export type ErrorType = PostgrestError | null;
 
 export interface MovieStore {
   // Estado
+  selectedMovie: Movie | null;
   movies: Movie[];
-  // selectedMovie: Movie | null;
   loading: boolean;
   error: ErrorType;
   // filter: string;
@@ -22,7 +22,7 @@ export interface MovieStore {
   // addMovie: (movie: MovieInsert) => Promise<void>;
   // updateMovie: (movie: MovieUpdate) => Promise<void>;
   // deleteMovie: (id: string) => Promise<void>;
-  // setSelectedMovie: (movie: Movie | null) => void;
+  setSelectedMovie: (movie: Movie | null) => void;
   // setFilter: (filter: string) => void;
 }
 
