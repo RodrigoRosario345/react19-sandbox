@@ -1,11 +1,50 @@
 import gsap from "gsap";
 import type { GSAPTimeline } from "@/types/infiniteScroll";
 
+
+/**
+ * Animación scroll infinite
+ */
+export function carruselInfiniteAnimation(element: HTMLElement): GSAPTimeline {
+  const tl = gsap.timeline();
+
+  tl.fromTo(
+    element,
+    {
+      scale: 0,
+      opacity: 0,
+    },
+    {
+      scale: 1,
+      opacity: 1,
+      zIndex: 100,
+      duration: 0.5,
+      yoyo: true,
+      repeat: 1,
+      ease: "power1.in",
+      immediateRender: false,
+    }
+  ).fromTo(
+      element,
+      { xPercent: 400 },
+      {
+        xPercent: -400,
+        duration: 1,
+        ease: "none",
+        immediateRender: false,
+      },
+      0
+    );
+
+  return tl;
+}
+
+
 /**
  * Animación de carta con flip horizontal
  * Ideal para elementos tipo carta con frente y reverso
  */
-export function carruselInfiniteAnimation(element: HTMLElement): GSAPTimeline {
+export function carruselInfiniteDetailsAnimation(element: HTMLElement): GSAPTimeline {
   const tl = gsap.timeline();
 
   tl.fromTo(

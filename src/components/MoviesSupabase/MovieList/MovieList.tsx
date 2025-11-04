@@ -12,7 +12,7 @@ export function MovieList() {
     const loading: boolean = useMovieStore((state) => state.loading);
     const error: ErrorType = useMovieStore((state) => state.error);
     const fetchMovies = useMovieStore((state) => state.fetchMovies);
-    
+
     useEffect(() => {
         fetchMovies();
     }, []);
@@ -36,7 +36,9 @@ export function MovieList() {
                         // Animación
                         spacing={0.2}
                         animateFunc={carruselInfiniteAnimation}
-                    />
+                    >
+                    </InfiniteScroll>
+
                 )
             }
         </>

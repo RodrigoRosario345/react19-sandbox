@@ -1,22 +1,48 @@
 import type { Movie } from "@/interfaces/movie.model";
+import { MovieItemDetail } from "./MovieItemDetail";
+import { useState } from "react";
+import { Button } from "@/components/ui";
+import { IoClose } from "react-icons/io5";
 
 interface MovieItemProps {
     movie: Movie;
 }
 
 export function MovieItem({ movie }: MovieItemProps) {
+    const [isDetailVisible, setIsDetailVisible] = useState<boolean>(false);
+
+    const toggleDetail = () => {
+        setIsDetailVisible(!isDetailVisible);
+    };
 
     return (
-        <div className="size-full rounded-2xl shadow-[5px_5px_3px_rgba(0,0,0,0.5),-5px_-5px_3px_rgba(255,255,255,0.5)] hover:scale-105 transition-all cursor-pointer">
-            {/* <h3>{movie.title}</h3>
-            <p>{movie.description}</p>
-            <p>{movie.release_year}</p>
-            <p>{movie.duration_minutes}</p>
-            <p>{movie.rating}</p>
-            <p>{movie.genre}</p>
-            <p>{movie.director}</p>
-            <a href={movie.trailer_url!}>Watch Trailer</a> */}
-            <img className="size-full rounded-2xl object-cover" src={movie.poster_url!} alt={movie.title} />
-        </div>
-    )
+        <>
+            <div
+                className="size-full rounded-2xl 
+                            shadow-[5px_5px_3px_rgba(0,0,0,0.5),-5px_-5px_3px_rgba(255,255,255,0.5)] 
+                            hover:scale-105 transition-all cursor-pointer"
+                onClick={toggleDetail}
+            >
+                <img
+                    className="size-full rounded-2xl object-cover"
+                    src={movie.poster_url!}
+                    alt={movie.title}
+                />
+            </div>
+            <MovieItemDetail isDetailVisible={isDetailVisible}>
+                <h3>{movie.title}</h3>
+                <p>{movie.description}</p>
+                <p>{movie.release_year}</p>
+                <p>{movie.duration_minutes}</p>
+                <p>{movie.rating}</p>
+                <p>{movie.genre}</p>
+                <p>{movie.director}</p>
+                <a href={movie.trailer_url!}>Watch Trailer</a>
+                <Button parentMethod={toggleDetail}>
+                    <IoClose />
+                </Button>
+            </MovieItemDetail>
+
+        </>
+    );
 }

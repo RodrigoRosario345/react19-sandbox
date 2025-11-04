@@ -1,6 +1,6 @@
 import { InfiniteScroll } from "@/components/InfiniteScroll";
 import { PlanetItem } from "../PlanetItem/PlanetItem";
-import { carruselInfiniteAnimation } from "@/utils/gsap";
+import { carruselInfiniteDetailsAnimation } from "@/utils/gsap";
 
 interface Planet {
     id: number;
@@ -45,7 +45,7 @@ export function PlanetList() {
                             </PlanetItem>
                         )}
                         // Animación
-                        animateFunc={carruselInfiniteAnimation}
+                        animateFunc={carruselInfiniteDetailsAnimation}
                         spacing={0.1}
                         showMarkers={false}
                         // Callbacks opcionales
