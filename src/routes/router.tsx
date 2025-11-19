@@ -8,6 +8,7 @@ import AuthPage from "@/pages/AuthPage";
 import { TaskPage } from "@/pages/TaskPage";
 import { MoviePage } from "@/pages/MoviePage";
 import { PlanetPage } from "@/pages/PlanetPage";
+import { MovieContainer, MovieCreateForm } from "@/components/MoviesSupabase";
 
 function AppRouter() {
     return (
@@ -17,7 +18,12 @@ function AppRouter() {
                 <Route path={ROUTES.AUTH} element={<AuthPage />} />
                 <Route path={ROUTES.HOME} element={<HomePage />} />
                 <Route path={ROUTES.TASK} element={<TaskPage />} />
-                <Route path={ROUTES.MOVIES} element={<MoviePage />} />
+                <Route path={ROUTES.MOVIES} element={<MoviePage />}>
+                    <Route index element={<MovieContainer />} /> 
+                    {/* <Route path=":id" element={<MovieDetail />} />  */}
+                    <Route path="create" element={<MovieCreateForm />} /> 
+                    {/* <Route path="edit/:id" element={<MovieEditForm />} />  */}
+                </Route>
                 <Route path={ROUTES.CHARACTERS} element={<CharactersPage />} />
                 <Route path={ROUTES.PLANETS} element={<PlanetPage />} />
                 <Route path="*" element={<NotFoundPage />} />

@@ -1,5 +1,5 @@
 import { Title } from "@/components";
-import { MovieContainer } from "@/components/MoviesSupabase";
+import { Outlet } from "react-router-dom";
 
 export function MoviePage() {
 
@@ -8,7 +8,7 @@ export function MoviePage() {
             <Title>
                 <span className="text-white">PELICULAS</span>
             </Title>
-            <MovieContainer />
+            <Outlet />
         </>
     )
 }
