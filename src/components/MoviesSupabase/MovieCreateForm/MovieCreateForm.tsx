@@ -1,18 +1,15 @@
 import { ControllerInput } from "@/components/ui";
 import type { MovieInsert } from "@/interfaces/movie.model";
-import { onlyNumbers } from "@/utils/input/onlyNumbers";
+import { sanitizeRatingInput } from "@/utils/input/onlyNumbers";
 import { Button, Datepicker, Label, Textarea, TextInput } from "flowbite-react";
 import { useForm } from "react-hook-form";
-
-
-
 
 export function MovieCreateForm() {
     const {
         control,
         handleSubmit,
+        setError,
         formState: { errors },
-        setValue
     } = useForm<MovieInsert>({ mode: "onChange" });
 
     const onSubmit = (data: MovieInsert) => {
@@ -79,7 +76,8 @@ export function MovieCreateForm() {
                         min: { value: 0, message: "Rating must be at least 0" },
                         max: { value: 10, message: "Rating must be at most 10" }
                     }}
-                    transformValue={onlyNumbers}
+                    setError={setError}
+                    transformValue={sanitizeRatingInput}
                 />
                 <div>
                     <div className="mb-2">

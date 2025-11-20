@@ -1,5 +1,5 @@
 import { HelperText, Label, TextInput } from "flowbite-react";
-import { Controller, type Control, type FieldError, type FieldValues, type Path, type RegisterOptions } from "react-hook-form";
+import { Controller, type Control, type FieldError, type FieldValues, type Path, type RegisterOptions, type UseFormSetError } from "react-hook-form";
 import type { ComponentProps } from "react";
 import type { InputTransformer } from "@/types/input";
 
@@ -14,6 +14,7 @@ export interface ControllerInputProps<T extends FieldValues> {
     required?: boolean;
     className?: string;
     error?: FieldError
+    setError?: UseFormSetError<T>;
     validation?: RegisterOptions<T>;
     transformValue?: InputTransformer
 }
@@ -30,7 +31,8 @@ export function ControllerInput<T extends FieldValues>({
     className,
     error,
     validation,
-    transformValue
+    transformValue,
+    setError,
 }: ControllerInputProps<T>) {
     const hasError = !!error;
     const colorState = hasError ? "failure" : "gray";
@@ -68,7 +70,9 @@ export function ControllerInput<T extends FieldValues>({
                                 helperText ? `${name}-helper` : undefined
                         }
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                            const transformedValue = transformValue ? transformValue(e.target.value, field.value) : e.target.value;
+                            const transformedValue = transformValue 
+                                ? transformValue(e.target.value, setError, { field: field.name, type: 'validation' }) 
+                                : e.target.value;
                             field.onChange(transformedValue);
                         }}
                     />

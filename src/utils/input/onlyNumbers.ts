@@ -1,13 +1,29 @@
 import type { InputTransformer } from "@/types/input";
 
-// validate number input range 0 to 10 only accepting numbers and decimal examples like 0, 1, 2.5, 10, etc.
-export const onlyNumbers: InputTransformer = (currentValue, prevValue) => {
+export const sanitizeRatingInput: InputTransformer = (currentValue, setError, dataError) => {
+    if (!currentValue.trim()) return currentValue;
 
-    const numberValue = parseFloat(currentValue.trim());
-    if (isNaN(numberValue) || numberValue < 0 || numberValue > 10) {
+    const cleaned = currentValue.replace(/[^0-9.]/g, '');
+
+    // Validate: numbers 0–10 with optional decimal (as typing)
+    const validFormat = /^(10|\d(?:\.\d?)?)$/.test(cleaned);
+
+    if (!validFormat) {
+        if (setError && dataError) {
+            // Usamos setTimeout para que el error se establezca DESPUÉS de que
+            // React Hook Form procese el onChange (que de otro modo limpiaría este error)
+            setTimeout(() => {
+                setError(dataError.field as any, {
+                    type: dataError.type,
+                    message: "Rating must be a number between 0 and 10"
+                });
+            }, 0);
+        }
         return "";
-    }
+    };
 
+    const value = parseFloat(cleaned);
+    if (isNaN(value) || value > 10) return "";
 
-    return numberValue.toString();
+    return cleaned;
 };
