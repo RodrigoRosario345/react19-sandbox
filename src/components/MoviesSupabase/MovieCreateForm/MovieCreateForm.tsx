@@ -1,7 +1,11 @@
 import { ControllerInput } from "@/components/ui";
 import type { MovieInsert } from "@/interfaces/movie.model";
+import { onlyNumbers } from "@/utils/input/onlyNumbers";
 import { Button, Datepicker, Label, Textarea, TextInput } from "flowbite-react";
 import { useForm } from "react-hook-form";
+
+
+
 
 export function MovieCreateForm() {
     const {
@@ -18,7 +22,7 @@ export function MovieCreateForm() {
     return (
         <div className="font-sans">
             <form
-                className="m-auto flex max-w-md flex-col gap-4 bg-gray-800 p-6 rounded-lg"
+                className="m-auto flex max-w-xl flex-col gap-4 bg-gray-800 p-6 rounded-lg"
                 onSubmit={handleSubmit(onSubmit)}
             >
                 <h1 className="text-lg font-semibold text-white">Create New Movie</h1>
@@ -72,8 +76,10 @@ export function MovieCreateForm() {
                     label="Rating"
                     placeholder="Enter movie rating"
                     validation={{
-                        pattern: { value: /^(10|\d)(\.[0-9]{1,2})?$/, message: "Rating must be a valid number" }
+                        min: { value: 0, message: "Rating must be at least 0" },
+                        max: { value: 10, message: "Rating must be at most 10" }
                     }}
+                    transformValue={onlyNumbers}
                 />
                 <div>
                     <div className="mb-2">

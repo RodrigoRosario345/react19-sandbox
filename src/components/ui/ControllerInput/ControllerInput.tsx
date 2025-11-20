@@ -1,6 +1,7 @@
 import { HelperText, Label, TextInput } from "flowbite-react";
 import { Controller, type Control, type FieldError, type FieldValues, type Path, type RegisterOptions } from "react-hook-form";
 import type { ComponentProps } from "react";
+import type { InputTransformer } from "@/types/input";
 
 export interface ControllerInputProps<T extends FieldValues> {
     name: Path<T>;
@@ -14,6 +15,7 @@ export interface ControllerInputProps<T extends FieldValues> {
     className?: string;
     error?: FieldError
     validation?: RegisterOptions<T>;
+    transformValue?: InputTransformer
 }
 
 export function ControllerInput<T extends FieldValues>({
@@ -27,7 +29,8 @@ export function ControllerInput<T extends FieldValues>({
     required = false,
     className,
     error,
-    validation
+    validation,
+    transformValue
 }: ControllerInputProps<T>) {
     const hasError = !!error;
     const colorState = hasError ? "failure" : "gray";
@@ -58,11 +61,16 @@ export function ControllerInput<T extends FieldValues>({
                         color={colorState}
                         disabled={disabled}
                         shadow
+                        value={field.value || ''}
                         aria-invalid={hasError}
                         aria-describedby={
                             hasError ? `${name}-error` :
                                 helperText ? `${name}-helper` : undefined
                         }
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            const transformedValue = transformValue ? transformValue(e.target.value, field.value) : e.target.value;
+                            field.onChange(transformedValue);
+                        }}
                     />
                 )}
             />
