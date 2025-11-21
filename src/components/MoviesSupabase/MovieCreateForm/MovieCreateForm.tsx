@@ -1,6 +1,7 @@
 import { ControllerInput } from "@/components/ui";
-import type { MovieInsert } from "@/interfaces/movie.model";
+import { schemaMovieInsert, type MovieInsert, type MovieSchemaInsert } from "@/interfaces/movie.model";
 import { sanitizeRatingInput } from "@/utils/input/onlyNumbers";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Datepicker, Label, Textarea, TextInput } from "flowbite-react";
 import { useForm } from "react-hook-form";
 
@@ -10,9 +11,9 @@ export function MovieCreateForm() {
         handleSubmit,
         setError,
         formState: { errors },
-    } = useForm<MovieInsert>({ mode: "onChange" });
+    } = useForm<MovieSchemaInsert>({ mode: "onChange", resolver: zodResolver(schemaMovieInsert) });
 
-    const onSubmit = (data: MovieInsert) => {
+    const onSubmit = (data: MovieSchemaInsert) => {
         console.log("Data insert movie: ", data);
     };
 
@@ -23,16 +24,16 @@ export function MovieCreateForm() {
                 onSubmit={handleSubmit(onSubmit)}
             >
                 <h1 className="text-lg font-semibold text-white">Create New Movie</h1>
-                <ControllerInput<MovieInsert>
+                <ControllerInput<MovieSchemaInsert>
                     control={control}
                     error={errors.title}
                     name="title"
                     label="Title"
                     placeholder="Enter movie title"
                     required
-                    validation={{
-                        minLength: { value: 3, message: "Title must be at least 3 characters long" }
-                    }}
+                // validation={{
+                //     minLength: { value: 3, message: "Title must be at least 3 characters long" }
+                // }}
                 />
                 <div>
                     <div className="mb-2">
@@ -45,51 +46,68 @@ export function MovieCreateForm() {
                         rows={4}
                     />
                 </div>
-                <div>
-                    <div className="mb-2">
-                        <Label htmlFor="release_year">Release Year</Label>
-                    </div>
-                    <Datepicker
-                        language="en"
-                        labelTodayButton="Today"
-                        labelClearButton="Clear"
-                    />
-                </div>
-                <ControllerInput<MovieInsert>
+                <ControllerInput<MovieSchemaInsert>
+                    control={control}
+                    error={errors.director}
+                    name="director"
+                    label="Director"
+                    placeholder="Enter movie director"
+                />
+                <ControllerInput<MovieSchemaInsert>
+                    control={control}
+                    error={errors.release_year}
+                    name="release_year"
+                    label="Release Year"
+                    placeholder="Enter movie release year"
+                />
+                <ControllerInput<MovieSchemaInsert>
                     control={control}
                     error={errors.duration_minutes}
                     name="duration_minutes"
                     label="Duration Minutes"
                     placeholder="Enter movie duration in minutes"
-                    validation={{
-                        minLength: { value: 2, message: "Duration must be at least 2 characters long" },
-                        pattern: { value: /^[0-9]+$/, message: "Duration must be a number" }
-                    }}
+                    // validation={{
+                    //     minLength: { value: 2, message: "Duration must be at least 2 characters long" },
+                    //     pattern: { value: /^[0-9]+$/, message: "Duration must be a number" }
+                    // }}
                 />
-                <ControllerInput<MovieInsert>
+                <ControllerInput<MovieSchemaInsert>
                     control={control}
                     error={errors.rating}
                     name="rating"
                     label="Rating"
                     placeholder="Enter movie rating"
-                    validation={{
-                        min: { value: 0, message: "Rating must be at least 0" },
-                        max: { value: 10, message: "Rating must be at most 10" }
-                    }}
                     setError={setError}
                     transformValue={sanitizeRatingInput}
                 />
-                <div>
-                    <div className="mb-2">
-                        <Label htmlFor="genre">Genre</Label>
-                    </div>
-                    <TextInput
-                        id="genre"
-                        type="text"
-                        placeholder="Enter movie genre"
-                        shadow
-                    />
-                </div>
+                <ControllerInput<MovieSchemaInsert>
+                    control={control}
+                    error={errors.genre}
+                    name="genre"
+                    label="Genre"
+                    placeholder="Enter movie genre"
+                />
+                <ControllerInput<MovieSchemaInsert>
+                    control={control}
+                    error={errors.background_url}
+                    name="background_url"
+                    label="Background URL"
+                    placeholder="Enter movie background URL"
+                />
+                <ControllerInput<MovieSchemaInsert>
+                    control={control}
+                    error={errors.poster_url}
+                    name="poster_url"
+                    label="Poster URL"
+                    placeholder="Enter movie poster URL"
+                />
+                <ControllerInput<MovieSchemaInsert>
+                    control={control}
+                    error={errors.trailer_url}
+                    name="trailer_url"
+                    label="Trailer URL"
+                    placeholder="Enter movie trailer URL"
+                />
                 <Button className="cursor-pointer" type="submit">
                     Create Movie
                 </Button>

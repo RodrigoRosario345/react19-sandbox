@@ -70,9 +70,10 @@ export function ControllerInput<T extends FieldValues>({
                                 helperText ? `${name}-helper` : undefined
                         }
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                            const transformedValue = transformValue 
-                                ? transformValue(e.target.value, setError, { field: field.name, type: 'validation' }) 
+                            const transformedValue = transformValue
+                                ? transformValue(e.target.value, setError, { field: field.name, type: 'validation' })
                                 : e.target.value;
+                            console.log("typeof transformedValue:", typeof transformedValue);
                             field.onChange(transformedValue);
                         }}
                     />
