@@ -95,6 +95,7 @@ export interface MovieStore {
   // updateMovie: (movie: MovieUpdate) => Promise<void>;
   // deleteMovie: (id: string) => Promise<void>;
   setSelectedMovie: (movie: Movie | null) => void;
+  clearSelectedMovie: () => void;
   clearOperationResult: () => void;
   // setFilter: (filter: string) => void;
 }

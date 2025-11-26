@@ -1,7 +1,7 @@
+import { useModal } from "@/hooks";
 import type { OperationResult } from "@/interfaces/movie.model";
 import { useMovieStore } from "@/store/movie.store";
 import { Button } from "flowbite-react";
-import { useEffect } from "react";
 import { FaCheckCircle } from "react-icons/fa";
 import { IoMdCloseCircle } from "react-icons/io";
 
@@ -25,24 +25,24 @@ const MODAL_CONFIG = {
 interface ModalProps extends OperationResult { }
 
 export function Modal({ status, message }: ModalProps) {
-    const clearOperationResult = useMovieStore((state) => state.clearOperationResult);
+    const clearOperationResult = useMovieStore(
+        (state) => state.clearOperationResult
+    );
+    const { backdropRef, modalRef, closeModal } = useModal({
+        onClose: clearOperationResult,
+        autoCloseDelay: 4000,
+    });
+
     const config = MODAL_CONFIG[status];
     const Icon = config.icon;
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            clearOperationResult();
-        }, 3000);
-
-        return () => clearTimeout(timer);
-    }, [clearOperationResult]);
 
     return (
         <>
             {/* Backdrop */}
             <div
                 className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
-                onClick={clearOperationResult}
+                onClick={closeModal}
+                ref={backdropRef}
                 aria-hidden="true"
             />
 
@@ -51,6 +51,7 @@ export function Modal({ status, message }: ModalProps) {
                 role="dialog"
                 aria-modal="true"
                 className="fixed inset-0 z-50 flex items-center justify-center p-4"
+                ref={modalRef}
             >
                 <div className="w-full max-w-[320px] flex flex-col gap-5 p-6 rounded-2xl font-sans bg-white text-center shadow-2xl">
                     <div className={`text-7xl mx-auto ${config.iconColor}`}>

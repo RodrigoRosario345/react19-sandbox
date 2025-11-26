@@ -1,14 +1,9 @@
 // MovieItemDetail.tsx
 import { Button } from "@/components/ui";
+import { useModal } from "@/hooks";
 import { useMovieStore } from "@/store/movie.store";
-import type { GSAPTimeline } from "@/types/infiniteScroll";
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
-import { useCallback, useEffect, useRef } from "react";
 import { IoClose, IoStar } from "react-icons/io5";
 import { PiLineVertical } from "react-icons/pi";
-
-gsap.registerPlugin(useGSAP);
 
 function getHoursMinutes(totalMinutes: number | null): string {
     if (totalMinutes === null) return "";
@@ -23,82 +18,10 @@ function getHoursMinutes(totalMinutes: number | null): string {
     ].join(" ").trim();
 }
 
-function animateElements(elements: HTMLDivElement[]): GSAPTimeline {
-    const timeline = gsap.timeline();
-
-    elements.forEach((element: HTMLDivElement, index) => {
-        timeline.from(
-            element,
-            {
-                scale: 0,
-                opacity: 0,
-                duration: 0.3,
-                ease: "back.out(1.7)",
-            },
-            index * 0.05
-        );
-    });
-
-    return timeline;
-}
 export function MovieItemDetail() {
     const movie = useMovieStore((state) => state.selectedMovie);
-    const setSelectedMovie = useMovieStore((state) => state.setSelectedMovie);
-    const modalRef = useRef<HTMLDivElement | null>(null);
-    const backdropRef = useRef<HTMLDivElement | null>(null);
-    const timelineRef = useRef<GSAPTimeline | null>(null);
-
-    const toggleDetail = useCallback(() => {
-        const timeline = timelineRef.current;
-
-        if (!timeline) {
-            // Si no hay timeline, cierra directamente
-            setSelectedMovie(null);
-            return;
-        }
-
-        // Si la animación está activa, no hacer nada
-        if (timeline.isActive()) return;
-
-        timeline.reverse();
-
-        // Espera a que termine la animación antes de cerrar
-        timeline.eventCallback("onReverseComplete", () => {
-            setSelectedMovie(null);
-            // Limpiar el callback para evitar memoria leak
-            timeline.eventCallback("onReverseComplete", null);
-        });
-    }, [setSelectedMovie]);
-
-    useGSAP(
-        () => {
-            // Solo se anima si hay movie y modalRef
-            if (!movie || !modalRef.current || !backdropRef.current) return;
-
-            const elements: HTMLDivElement[] = [
-                backdropRef.current,
-                modalRef.current,
-            ];
-
-            // Crea un timeline para que inicie automáticamente
-            timelineRef.current = animateElements(elements);
-        },
-        { dependencies: [movie], scope: modalRef }
-    );
-
-    useEffect(() => {
-        if (!movie) return;
-
-        const handleEscape = (e: KeyboardEvent) => {
-            if (e.key === "Escape") toggleDetail();
-        };
-
-        window.addEventListener("keydown", handleEscape);
-        return () => {
-            console.log("Removing escape listener");
-            window.removeEventListener("keydown", handleEscape);
-        };
-    }, [movie, toggleDetail]);
+    const clearSelectedMovie = useMovieStore((state) => state.clearSelectedMovie);
+    const { backdropRef, modalRef, closeModal } = useModal({ shouldAnimate: !!movie, onClose: clearSelectedMovie });
 
     if (!movie) return null;
 
@@ -107,7 +30,7 @@ export function MovieItemDetail() {
             {/* Backdrop/Overlay para cerrar al hacer clic fuera */}
             <div
                 className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 scale-100 opacity-100"
-                onClick={toggleDetail}
+                onClick={closeModal}
                 ref={backdropRef}
             />
 
@@ -122,7 +45,7 @@ export function MovieItemDetail() {
             >
                 {/* Botón cerrar */}
                 <Button
-                    parentMethod={toggleDetail}
+                    parentMethod={closeModal}
                     className="absolute top-4 right-4 z-20 text-white hover:text-white/70"
                     aria-label="close"
                 >

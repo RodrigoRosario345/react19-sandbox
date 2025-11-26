@@ -20,6 +20,7 @@ export const useMovieStore = create<MovieStore>((set) => ({
         set({ movies: data ?? [], loading: false });
     },
     setSelectedMovie: (movie) => set({ selectedMovie: movie }),
+    clearSelectedMovie: () => set({ selectedMovie: null }),
     addMovie: async (movie) => {
         set({ loading: true, operationResult: null });
 

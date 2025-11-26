@@ -4,6 +4,8 @@ import { sanitizeRatingInput } from "@/utils/input/onlyNumbers";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Datepicker, Label, Textarea, TextInput } from "flowbite-react";
 import { useForm } from "react-hook-form";
+import { HiOutlineArrowLeft } from "react-icons/hi";
+import { useNavigate } from "react-router-dom";
 
 export function MovieCreateForm() {
     const {
@@ -12,14 +14,19 @@ export function MovieCreateForm() {
         setError,
         formState: { errors },
     } = useForm<MovieSchemaInsert>({ mode: "onChange", resolver: zodResolver(schemaMovieInsert) });
+    const navigate = useNavigate();
 
+    const goBack = () => navigate(-1);
     const onSubmit = (data: MovieSchemaInsert) => {
         console.log("Data insert movie: ", data);
-        
+
     };
 
     return (
         <div className="font-sans">
+            <Button onClick={goBack} color="dark" className="sticky top-[60px] left-0 mb-5 cursor-pointer">
+                <HiOutlineArrowLeft className="h-6 w-6" />
+            </Button>
             <form
                 className="m-auto flex max-w-xl flex-col gap-4 bg-gray-800 p-6 rounded-lg"
                 onSubmit={handleSubmit(onSubmit)}
@@ -67,10 +74,10 @@ export function MovieCreateForm() {
                     name="duration_minutes"
                     label="Duration Minutes"
                     placeholder="Enter movie duration in minutes"
-                    // validation={{
-                    //     minLength: { value: 2, message: "Duration must be at least 2 characters long" },
-                    //     pattern: { value: /^[0-9]+$/, message: "Duration must be a number" }
-                    // }}
+                // validation={{
+                //     minLength: { value: 2, message: "Duration must be at least 2 characters long" },
+                //     pattern: { value: /^[0-9]+$/, message: "Duration must be a number" }
+                // }}
                 />
                 <ControllerInput<MovieSchemaInsert>
                     control={control}
