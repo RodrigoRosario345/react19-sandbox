@@ -15,6 +15,7 @@ export function MovieCreateForm() {
 
     const onSubmit = (data: MovieSchemaInsert) => {
         console.log("Data insert movie: ", data);
+        
     };
 
     return (

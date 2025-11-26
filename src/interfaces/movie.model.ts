@@ -74,19 +74,27 @@ export const schemaMovieInsert = z.object({
 
 export type MovieSchemaInsert = z.infer<typeof schemaMovieInsert>;
 
+export interface OperationResult {
+  type?: 'add' | 'edit' | 'delete';
+  status: 'success' | 'error';
+  message: string;
+}
+
 export interface MovieStore {
   // Estado
   selectedMovie: Movie | null;
   movies: Movie[];
   loading: boolean;
   error: ErrorType;
+  operationResult: OperationResult | null;
   // filter: string;
 
   // Acciones
   fetchMovies: () => Promise<void>;
-  // addMovie: (movie: MovieInsert) => Promise<void>;
+  addMovie: (movie: MovieInsert) => Promise<void>;
   // updateMovie: (movie: MovieUpdate) => Promise<void>;
   // deleteMovie: (id: string) => Promise<void>;
   setSelectedMovie: (movie: Movie | null) => void;
+  clearOperationResult: () => void;
   // setFilter: (filter: string) => void;
 }
