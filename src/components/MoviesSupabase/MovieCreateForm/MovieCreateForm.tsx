@@ -1,30 +1,42 @@
-import { ControllerInput } from "@/components/ui";
-import { schemaMovieInsert, type MovieInsert, type MovieSchemaInsert } from "@/interfaces/movie.model";
-import { sanitizeRatingInput } from "@/utils/input/onlyNumbers";
+import { ControllerInput } from "@/components/ui/form/ControllerInput";
+import { ControllerSelect } from "@/components/ui/form/ControllerSelect";
+import { ControllerTextarea } from "@/components/ui/form/ControllerTextarea";
+import { MOVIE_GENRES, schemaMovieInsert, type MovieSchemaInsert } from "@/interfaces/movie.model";
+import { useMovieStore } from "@/store/movie.store";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Datepicker, Label, Textarea, TextInput } from "flowbite-react";
+import { Button } from "flowbite-react";
 import { useForm } from "react-hook-form";
 import { HiOutlineArrowLeft } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 
 export function MovieCreateForm() {
-    const {
-        control,
-        handleSubmit,
-        setError,
-        formState: { errors },
-    } = useForm<MovieSchemaInsert>({ mode: "onChange", resolver: zodResolver(schemaMovieInsert) });
+    const addMovie = useMovieStore((state) => state.addMovie)
+    const { control, handleSubmit } = useForm<MovieSchemaInsert>({
+        mode: "onChange",
+        resolver: zodResolver(schemaMovieInsert),
+    });
     const navigate = useNavigate();
 
     const goBack = () => navigate(-1);
     const onSubmit = (data: MovieSchemaInsert) => {
-        console.log("Data insert movie: ", data);
-
+        addMovie(
+            {
+                ...data,
+                release_year: +data.release_year!,
+                duration_minutes: +data.duration_minutes!,
+                rating: +data.rating!
+            }
+        );
+        goBack();
     };
 
     return (
         <div className="font-sans">
-            <Button onClick={goBack} color="dark" className="sticky top-[60px] left-0 mb-5 cursor-pointer">
+            <Button
+                onClick={goBack}
+                color="dark"
+                className="sticky top-[60px] left-0 mb-5 cursor-pointer"
+            >
                 <HiOutlineArrowLeft className="h-6 w-6" />
             </Button>
             <form
@@ -34,7 +46,6 @@ export function MovieCreateForm() {
                 <h1 className="text-lg font-semibold text-white">Create New Movie</h1>
                 <ControllerInput<MovieSchemaInsert>
                     control={control}
-                    error={errors.title}
                     name="title"
                     label="Title"
                     placeholder="Enter movie title"
@@ -43,75 +54,65 @@ export function MovieCreateForm() {
                 //     minLength: { value: 3, message: "Title must be at least 3 characters long" }
                 // }}
                 />
-                <div>
-                    <div className="mb-2">
-                        <Label htmlFor="description">Description</Label>
-                    </div>
-                    <Textarea
-                        id="description"
-                        placeholder="Enter movie description"
-                        required
-                        rows={4}
-                    />
-                </div>
+                <ControllerTextarea<MovieSchemaInsert>
+                    control={control}
+                    name="description"
+                    label="Description"
+                    placeholder="Enter movie description"
+                />
                 <ControllerInput<MovieSchemaInsert>
                     control={control}
-                    error={errors.director}
                     name="director"
                     label="Director"
                     placeholder="Enter movie director"
                 />
+                <div className="flex gap-2.5">
+                    <ControllerInput<MovieSchemaInsert>
+                        control={control}
+                        name="release_year"
+                        label="Release Year"
+                        placeholder="Enter movie release year"
+                    />
+                    <ControllerInput<MovieSchemaInsert>
+                        control={control}
+                        name="duration_minutes"
+                        label="Duration Minutes"
+                        placeholder="Enter movie duration in minutes"
+                    // validation={{
+                    //     minLength: { value: 2, message: "Duration must be at least 2 characters long" },
+                    //     pattern: { value: /^[0-9]+$/, message: "Duration must be a number" }
+                    // }}
+                    />
+                </div>
+                <div className="flex gap-2.5">
+                    <ControllerInput<MovieSchemaInsert>
+                        control={control}
+                        name="rating"
+                        label="Rating"
+                        placeholder="Enter movie rating"
+                    />
+                    <ControllerSelect<MovieSchemaInsert>
+                        control={control}
+                        name="genre"
+                        label="Genre"
+                        placeholder="Select movie genre"
+                        options={MOVIE_GENRES}
+                    />
+                </div>
                 <ControllerInput<MovieSchemaInsert>
                     control={control}
-                    error={errors.release_year}
-                    name="release_year"
-                    label="Release Year"
-                    placeholder="Enter movie release year"
-                />
-                <ControllerInput<MovieSchemaInsert>
-                    control={control}
-                    error={errors.duration_minutes}
-                    name="duration_minutes"
-                    label="Duration Minutes"
-                    placeholder="Enter movie duration in minutes"
-                // validation={{
-                //     minLength: { value: 2, message: "Duration must be at least 2 characters long" },
-                //     pattern: { value: /^[0-9]+$/, message: "Duration must be a number" }
-                // }}
-                />
-                <ControllerInput<MovieSchemaInsert>
-                    control={control}
-                    error={errors.rating}
-                    name="rating"
-                    label="Rating"
-                    placeholder="Enter movie rating"
-                    setError={setError}
-                    transformValue={sanitizeRatingInput}
-                />
-                <ControllerInput<MovieSchemaInsert>
-                    control={control}
-                    error={errors.genre}
-                    name="genre"
-                    label="Genre"
-                    placeholder="Enter movie genre"
-                />
-                <ControllerInput<MovieSchemaInsert>
-                    control={control}
-                    error={errors.background_url}
                     name="background_url"
                     label="Background URL"
                     placeholder="Enter movie background URL"
                 />
                 <ControllerInput<MovieSchemaInsert>
                     control={control}
-                    error={errors.poster_url}
                     name="poster_url"
                     label="Poster URL"
                     placeholder="Enter movie poster URL"
                 />
                 <ControllerInput<MovieSchemaInsert>
                     control={control}
-                    error={errors.trailer_url}
                     name="trailer_url"
                     label="Trailer URL"
                     placeholder="Enter movie trailer URL"

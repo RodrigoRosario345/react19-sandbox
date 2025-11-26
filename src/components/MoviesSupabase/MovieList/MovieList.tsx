@@ -36,10 +36,9 @@ export function MovieList() {
                                 <MovieItem movie={item} key={index} />
                             )}
                             // Animación
-                            spacing={0.2}
+                            spacing={0.1}
                             animateFunc={carruselInfiniteAnimation}
-                        >
-                        </InfiniteScroll>
+                        />
                         <MovieItemDetail />
                     </>
                 )

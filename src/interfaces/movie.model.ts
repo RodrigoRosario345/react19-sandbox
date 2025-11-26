@@ -1,6 +1,7 @@
 import type { PostgrestError } from "@supabase/supabase-js";
 import type { Tables, TablesInsert, TablesUpdate } from "./database.model";
 import z from "zod";
+import type { SelectOption } from "./input";
 
 export type Movie = Tables<"movies">;
 
@@ -9,6 +10,16 @@ export type MovieInsert = TablesInsert<"movies">;
 export type MovieUpdate = TablesUpdate<"movies">;
 
 export type ErrorType = PostgrestError | null;
+
+export const MovieGenresArray = [
+  "action",
+  "comedy",
+  "drama",
+  "horror",
+  "romance",
+  "sci-fi",
+  "thriller"
+] as const; 
 
 export const schemaMovieInsert = z.object({
   background_url: z
@@ -30,7 +41,7 @@ export const schemaMovieInsert = z.object({
     .transform((val: number) => val.toString())
     .nullable()
     .optional(),
-  genre: z.string().nullable().optional(),
+  genre: z.enum(MovieGenresArray, "Genre must be one of the predefined values"),
   poster_url: z
     .string()
     .url("Poster URL must be a valid URL")
@@ -55,16 +66,13 @@ export const schemaMovieInsert = z.object({
         .positive("Release year must be a positive number")
     )
     .transform((val: number) => {
-      console.log("value return: ", val)
-      return val.toString()
+      console.log("value return: ", val);
+      return val.toString();
     })
-    .pipe(
-      z
-        .string()
-        .min(4, "Release year must be at least 4 characters long"))
+    .pipe(z.string().length(4, "Release year must be at least 4 characters long"))
     .nullable()
     .optional(),
-  title: z.string().min(3, "Title must be at least 3 characters long"),
+  title: z.string("The field title is required").min(3, "Title must be at least 3 characters long"),
   trailer_url: z
     .string()
     .url("Trailer URL must be a valid URL")
@@ -72,11 +80,23 @@ export const schemaMovieInsert = z.object({
     .optional(),
 });
 
+export type MovieGenre = typeof MovieGenresArray[number];
+
+export const MOVIE_GENRES: SelectOption<MovieGenre>[] = [
+  { value: "action", label: "Action" },
+  { value: "comedy", label: "Comedy" },
+  { value: "drama", label: "Drama" },
+  { value: "horror", label: "Horror" },
+  { value: "romance", label: "Romance" },
+  { value: "sci-fi", label: "Sci-Fi" },
+  { value: "thriller", label: "Thriller" },
+];
+
 export type MovieSchemaInsert = z.infer<typeof schemaMovieInsert>;
 
 export interface OperationResult {
-  type?: 'add' | 'edit' | 'delete';
-  status: 'success' | 'error';
+  type?: "add" | "edit" | "delete";
+  status: "success" | "error";
   message: string;
 }
 
