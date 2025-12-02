@@ -16,7 +16,7 @@ export const useMovieStore = create<MovieStore>((set) => ({
             set({ error, loading: false });
             return;
         }
-
+        console.log("data received:", data);
         set({ movies: data ?? [], loading: false });
     },
     setSelectedMovie: (movie) => set({ selectedMovie: movie }),
@@ -24,7 +24,7 @@ export const useMovieStore = create<MovieStore>((set) => ({
     addMovie: async (movie) => {
         set({ loading: true, operationResult: null });
 
-        const { data, error } = await supabase
+        const { error } = await supabase
             .from("movies")
             .insert(movie)
             .select()
@@ -42,13 +42,61 @@ export const useMovieStore = create<MovieStore>((set) => ({
             return;
         }
 
-        set((state) => ({
+        set(() => ({
             loading: false,
-            movies: [...state.movies, data],
             operationResult: {
                 type: "add",
                 status: "success",
                 message: "The movie has been created successfully",
+            },
+        }));
+    },
+    updateMovie: async (movie) => {
+
+        const { data, error } = await supabase
+            .from("movies")
+            .update(movie)
+            .eq("id", movie.id!)
+            .select()
+            .single();
+
+        if (error) {
+            set({
+                operationResult: {
+                    type: "edit",
+                    status: "error",
+                    message: error.message || "Something went wrong please try again!!",
+                },
+            });
+            return;
+        }
+
+        set(() => ({
+            selectedMovie: data,
+            operationResult: {
+                type: "edit",
+                status: "success",
+                message: "The movie has been updated successfully",
+            },
+        }));
+    },
+    deleteMovie: async (id) => {
+        const { error } = await supabase.from("movies").delete().eq("id", id);
+        if (error) {
+            set({
+                operationResult: {
+                    type: "delete",
+                    status: "error",
+                    message: error.message || "Something went wrong please try again!!",
+                },
+            });
+            return;
+        }
+        set(() => ({
+            operationResult: {
+                type: "delete",
+                status: "success",
+                message: "The movie has been deleted successfully",
             },
         }));
     },

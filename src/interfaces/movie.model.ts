@@ -19,9 +19,9 @@ export const MovieGenresArray = [
   "romance",
   "sci-fi",
   "thriller"
-] as const; 
+] as const;
 
-export const schemaMovieInsert = z.object({
+export const schemaMovie = z.object({
   background_url: z
     .string()
     .url("Background URL must be a valid URL")
@@ -65,10 +65,7 @@ export const schemaMovieInsert = z.object({
         .number("Release year must be a number")
         .positive("Release year must be a positive number")
     )
-    .transform((val: number) => {
-      console.log("value return: ", val);
-      return val.toString();
-    })
+    .transform((val: number) => val.toString())
     .pipe(z.string().length(4, "Release year must be at least 4 characters long"))
     .nullable()
     .optional(),
@@ -92,7 +89,7 @@ export const MOVIE_GENRES: SelectOption<MovieGenre>[] = [
   { value: "thriller", label: "Thriller" },
 ];
 
-export type MovieSchemaInsert = z.infer<typeof schemaMovieInsert>;
+export type MovieSchema = z.infer<typeof schemaMovie>;
 
 export interface OperationResult {
   type?: "add" | "edit" | "delete";
@@ -112,8 +109,8 @@ export interface MovieStore {
   // Acciones
   fetchMovies: () => Promise<void>;
   addMovie: (movie: MovieInsert) => Promise<void>;
-  // updateMovie: (movie: MovieUpdate) => Promise<void>;
-  // deleteMovie: (id: string) => Promise<void>;
+  updateMovie: (movie: MovieUpdate) => Promise<void>;
+  deleteMovie: (id: string) => Promise<void>;
   setSelectedMovie: (movie: Movie | null) => void;
   clearSelectedMovie: () => void;
   clearOperationResult: () => void;

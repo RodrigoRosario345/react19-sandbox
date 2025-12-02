@@ -1,9 +1,13 @@
 // MovieItemDetail.tsx
-import { Button } from "@/components/ui";
+import { Button, DeleteModal } from "@/components/ui";
 import { useModal } from "@/hooks";
 import { useMovieStore } from "@/store/movie.store";
+import { useState } from "react";
+import { FaRegEdit } from "react-icons/fa";
 import { IoClose, IoStar } from "react-icons/io5";
+import { MdDeleteForever } from "react-icons/md";
 import { PiLineVertical } from "react-icons/pi";
+import { Link, useNavigate } from "react-router-dom";
 
 function getHoursMinutes(totalMinutes: number | null): string {
     if (totalMinutes === null) return "";
@@ -15,13 +19,23 @@ function getHoursMinutes(totalMinutes: number | null): string {
     return [
         hours ? `${hours}h` : "",
         remainingMinutes ? `${remainingMinutes}m` : "",
-    ].join(" ").trim();
+    ]
+        .join(" ")
+        .trim();
 }
 
 export function MovieItemDetail() {
     const movie = useMovieStore((state) => state.selectedMovie);
     const clearSelectedMovie = useMovieStore((state) => state.clearSelectedMovie);
-    const { backdropRef, modalRef, closeModal } = useModal({ shouldAnimate: !!movie, onClose: clearSelectedMovie });
+    const deleteMovie = useMovieStore((state) => state.deleteMovie);
+    const { backdropRef, modalRef, closeModal } = useModal({
+        shouldAnimate: !!movie,
+        onClose: clearSelectedMovie,
+    });
+    const navigate = useNavigate();
+
+    const goBack = () => navigate('/movies');
+    const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
 
     if (!movie) return null;
 
@@ -51,6 +65,20 @@ export function MovieItemDetail() {
                 >
                     <IoClose className="size-10" />
                 </Button>
+                <div className="absolute top-4 left-4 z-20 flex gap-2">
+                    <Link
+                        className="flex items-center gap-1 font-sans bg-yellow-400 text-white px-2 py-1 rounded transition-colors hover:bg-yellow-500"
+                        to="edit"
+                    >
+                        <FaRegEdit size="16" /> Edit
+                    </Link>
+                    <Button
+                        parentMethod={() => setShowDeleteModal(true)}
+                        className="flex items-center gap-1 font-sans bg-red-500 text-white px-2 py-1 rounded transition-colors hover:bg-red-600"
+                    >
+                        <MdDeleteForever size="16" /> Delete
+                    </Button>
+                </div>
 
                 {movie.background_url && (
                     <div
@@ -119,6 +147,17 @@ export function MovieItemDetail() {
                     </div>
                 </div>
             </div>
+            {showDeleteModal && (
+                <DeleteModal
+                    itemName={`movie ${movie.title}`}
+                    onDelete={async () => {
+                        await deleteMovie(movie.id!);
+                        closeModal();
+                        goBack();
+                    }}
+                    onClose={() => setShowDeleteModal(false)}
+                />
+            )}
         </>
     );
 }

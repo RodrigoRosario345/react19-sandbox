@@ -63,7 +63,6 @@ export function useModal(options: UseModalOptions): UseModalReturn {
     // Animación de entrada
     useGSAP(
         () => {
-            console.log(`modalRef: ${modalRef.current}, backdropRef: ${backdropRef.current}`)
             if (!shouldAnimate || !modalRef.current || !backdropRef.current) return;
 
             const elements = [backdropRef.current, modalRef.current];

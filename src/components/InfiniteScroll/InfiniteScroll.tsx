@@ -59,7 +59,6 @@ export function InfiniteScroll<T>({
   navigationButtonClassName,
   onNext,
   onPrevious,
-  onReady,
   children,
 }: InfiniteScrollProps<T>) {
   const { scrollViewportRef, scrollContentRef, handleNext, handlePrevious, isReady } =
@@ -74,9 +73,9 @@ export function InfiniteScroll<T>({
     });
 
   // Ejecutar callback cuando esté listo
-  if (isReady && onReady) {
-    onReady();
-  }
+  // if (isReady && onReady) {
+  //   onReady();
+  // }
 
   const handleNextClick = () => {
     handleNext();

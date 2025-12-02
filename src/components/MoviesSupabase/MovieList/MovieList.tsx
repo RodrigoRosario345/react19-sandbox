@@ -15,12 +15,15 @@ export function MovieList() {
     const fetchMovies = useMovieStore((state) => state.fetchMovies);
 
     useEffect(() => {
+        console.log("fetchMovies called from MovieList");
         fetchMovies();
-    }, []);
+    }, [fetchMovies]);
 
 
     if (loading) return <LoadingSpinner />;
     if (error) return <FuzzyText>{error.message}</FuzzyText>;
+
+    console.log("se renderiza movie list", movies);
 
     return (
         <>

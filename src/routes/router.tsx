@@ -8,7 +8,8 @@ import AuthPage from "@/pages/AuthPage";
 import { TaskPage } from "@/pages/TaskPage";
 import { MoviePage } from "@/pages/MoviePage";
 import { PlanetPage } from "@/pages/PlanetPage";
-import { MovieContainer, MovieCreateForm } from "@/components/MoviesSupabase";
+import { MovieContainer, MovieCreateForm, MovieEditForm } from "@/components/MoviesSupabase";
+
 
 function AppRouter() {
     return (
@@ -22,7 +23,7 @@ function AppRouter() {
                     <Route index element={<MovieContainer />} /> 
                     {/* <Route path=":id" element={<MovieDetail />} />  */}
                     <Route path="create" element={<MovieCreateForm />} /> 
-                    {/* <Route path="edit/:id" element={<MovieEditForm />} />  */}
+                    <Route path="edit" element={<MovieEditForm />} /> 
                 </Route>
                 <Route path={ROUTES.CHARACTERS} element={<CharactersPage />} />
                 <Route path={ROUTES.PLANETS} element={<PlanetPage />} />

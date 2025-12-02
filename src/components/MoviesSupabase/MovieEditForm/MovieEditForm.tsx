@@ -1,4 +1,4 @@
-import { ControllerInput } from "@/components/ui/form/ControllerInput";
+import { ControllerInput } from "@/components/ui";
 import { ControllerSelect } from "@/components/ui/form/ControllerSelect";
 import { ControllerTextarea } from "@/components/ui/form/ControllerTextarea";
 import { MOVIE_GENRES, schemaMovie, type MovieSchema } from "@/interfaces/movie.model";
@@ -9,26 +9,38 @@ import { useForm } from "react-hook-form";
 import { HiOutlineArrowLeft } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 
-export function MovieCreateForm() {
-    const addMovie = useMovieStore((state) => state.addMovie)
+export function MovieEditForm() {
+    const movie = useMovieStore((state) => state.selectedMovie);
+    const updateMovie = useMovieStore((state) => state.updateMovie)
     const { control, handleSubmit } = useForm<MovieSchema>({
         mode: "onChange",
         resolver: zodResolver(schemaMovie),
+        defaultValues: {
+            title: movie?.title || "",
+            description: movie?.description || "",
+            director: movie?.director || "",
+            release_year: movie?.release_year?.toString() || "",
+            duration_minutes: movie?.duration_minutes?.toString() || "",
+            rating: movie?.rating?.toString() || "",
+            genre: movie?.genre?.toLocaleLowerCase() as MovieSchema["genre"] || "",
+            background_url: movie?.background_url || "",
+            poster_url: movie?.poster_url || "",
+            trailer_url: movie?.trailer_url || "",
+        },
     });
     const navigate = useNavigate();
 
     const goBack = () => navigate(-1);
     const onSubmit = async (data: MovieSchema) => {
         console.log(data);
-        await addMovie(
-            {
-                ...data,
-                release_year: +data.release_year!,
-                duration_minutes: +data.duration_minutes!,
-                rating: +data.rating!
-            }
-        );
-        console.log("send data");
+        if (!movie) return;
+        await updateMovie({
+            ...data,
+            id: movie.id,
+            release_year: +data.release_year!,
+            duration_minutes: +data.duration_minutes!,
+            rating: +data.rating!
+        });
         goBack();
     };
 
@@ -45,16 +57,13 @@ export function MovieCreateForm() {
                 className="m-auto flex max-w-xl flex-col gap-4 bg-gray-800 p-6 rounded-lg"
                 onSubmit={handleSubmit(onSubmit)}
             >
-                <h1 className="text-lg font-semibold text-white">Create New Movie</h1>
+                <h1 className="text-lg font-semibold text-white">Edit Movie</h1>
                 <ControllerInput<MovieSchema>
                     control={control}
                     name="title"
                     label="Title"
                     placeholder="Enter movie title"
                     required
-                // validation={{
-                //     minLength: { value: 3, message: "Title must be at least 3 characters long" }
-                // }}
                 />
                 <ControllerTextarea<MovieSchema>
                     control={control}
@@ -80,10 +89,6 @@ export function MovieCreateForm() {
                         name="duration_minutes"
                         label="Duration Minutes"
                         placeholder="Enter movie duration in minutes"
-                    // validation={{
-                    //     minLength: { value: 2, message: "Duration must be at least 2 characters long" },
-                    //     pattern: { value: /^[0-9]+$/, message: "Duration must be a number" }
-                    // }}
                     />
                 </div>
                 <div className="flex gap-2.5">
@@ -120,7 +125,7 @@ export function MovieCreateForm() {
                     placeholder="Enter movie trailer URL"
                 />
                 <Button className="cursor-pointer" type="submit">
-                    Create Movie
+                    Update Movie
                 </Button>
             </form>
         </div>

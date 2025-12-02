@@ -20,7 +20,6 @@ export function ControllerTextarea<T extends FieldValues>({
     className,
 }: ControllerTextareaProps<T>) {
     const { field, error, hasError, colorState } = useControllerField(name, control, required);
-    console.log("field: ", field.value);
     return (
         <div className={`flex flex-col gap-2 ${className}`}>
             <Label htmlFor={name} className={hasError ? "text-red-500!" : ""}>
