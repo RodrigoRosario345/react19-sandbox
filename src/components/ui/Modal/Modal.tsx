@@ -40,7 +40,7 @@ export function Modal({ status, message }: ModalProps) {
         <>
             {/* Backdrop */}
             <div
-                className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
+                className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
                 onClick={closeModal}
                 ref={backdropRef}
                 aria-hidden="true"
@@ -50,10 +50,10 @@ export function Modal({ status, message }: ModalProps) {
             <div
                 role="dialog"
                 aria-modal="true"
-                className="fixed inset-0 z-50 flex items-center justify-center p-4"
+                className="max-w-[320px] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50"
                 ref={modalRef}
             >
-                <div className="w-full max-w-[320px] flex flex-col gap-5 p-6 rounded-2xl font-sans bg-white text-center shadow-2xl">
+                <div className="w-full flex flex-col gap-5 p-6 rounded-2xl font-sans bg-white text-center shadow-2xl">
                     <div className={`text-7xl mx-auto ${config.iconColor}`}>
                         <Icon />
                     </div>

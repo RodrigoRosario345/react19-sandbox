@@ -7,7 +7,7 @@ import { FaRegEdit } from "react-icons/fa";
 import { IoClose, IoStar } from "react-icons/io5";
 import { MdDeleteForever } from "react-icons/md";
 import { PiLineVertical } from "react-icons/pi";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function getHoursMinutes(totalMinutes: number | null): string {
     if (totalMinutes === null) return "";
@@ -19,9 +19,7 @@ function getHoursMinutes(totalMinutes: number | null): string {
     return [
         hours ? `${hours}h` : "",
         remainingMinutes ? `${remainingMinutes}m` : "",
-    ]
-        .join(" ")
-        .trim();
+    ].join(" ").trim();
 }
 
 export function MovieItemDetail() {
@@ -32,9 +30,6 @@ export function MovieItemDetail() {
         shouldAnimate: !!movie,
         onClose: clearSelectedMovie,
     });
-    const navigate = useNavigate();
-
-    const goBack = () => navigate('/movies');
     const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
 
     if (!movie) return null;
@@ -57,26 +52,30 @@ export function MovieItemDetail() {
                 onClick={(e) => e.stopPropagation()} // Evita que cierre al hacer clic dentro
                 ref={modalRef}
             >
-                {/* Botón cerrar */}
-                <Button
-                    parentMethod={closeModal}
-                    className="absolute top-4 right-4 z-20 text-white hover:text-white/70"
-                    aria-label="close"
-                >
-                    <IoClose className="size-10" />
-                </Button>
-                <div className="absolute top-4 left-4 z-20 flex gap-2">
-                    <Link
-                        className="flex items-center gap-1 font-sans bg-yellow-400 text-white px-2 py-1 rounded transition-colors hover:bg-yellow-500"
-                        to="edit"
-                    >
-                        <FaRegEdit size="16" /> Edit
-                    </Link>
+
+                <div className="w-full absolute top-4 left-0 px-10 z-20 flex justify-between gap-2">
+                    {/* Actions */}
+                    <div className="flex gap-2">
+                        <Link
+                            className="flex items-center gap-1.5 font-sans bg-yellow-400 text-white px-3 rounded transition-colors hover:bg-yellow-500"
+                            to="edit"
+                        >
+                            <FaRegEdit size="18" /> Edit
+                        </Link>
+                        <Button
+                            parentMethod={() => setShowDeleteModal(true)}
+                            className="flex items-center gap-1.5 font-sans bg-red-500 text-white px-3 rounded hover:bg-red-600"
+                        >
+                            <MdDeleteForever size="20" /> Delete
+                        </Button>
+                    </div>
+                    {/* Botón cerrar */}
                     <Button
-                        parentMethod={() => setShowDeleteModal(true)}
-                        className="flex items-center gap-1 font-sans bg-red-500 text-white px-2 py-1 rounded transition-colors hover:bg-red-600"
+                        parentMethod={closeModal}
+                        className="text-white hover:text-white/70"
+                        aria-label="close"
                     >
-                        <MdDeleteForever size="16" /> Delete
+                        <IoClose size="34" />
                     </Button>
                 </div>
 
@@ -153,7 +152,6 @@ export function MovieItemDetail() {
                     onDelete={async () => {
                         await deleteMovie(movie.id!);
                         closeModal();
-                        goBack();
                     }}
                     onClose={() => setShowDeleteModal(false)}
                 />

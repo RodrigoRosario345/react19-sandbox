@@ -48,9 +48,9 @@ export function DeleteModal({
                 aria-modal="true"
                 aria-labelledby="delete-modal-title"
                 aria-describedby="delete-modal-description"
-                className="fixed inset-0 z-50 flex items-center justify-center p-4"
+                className="max-w-sm fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50"
             >
-                <div className="relative w-full max-w-sm flex flex-col gap-7 p-6 rounded-2xl font-sans bg-white text-center shadow-2xl">
+                <div className="relative w-full flex flex-col gap-7 p-6 rounded-2xl font-sans bg-white text-center shadow-2xl">
                     <Button
                         parentMethod={closeModal}
                         className="absolute top-4 right-4 text-gray-400 hover:text-gray-500"
@@ -102,7 +102,7 @@ export function DeleteModal({
                                         aria-label="Info spinner example"
                                         className="me-3"
                                         light
-                                    />{" "}
+                                    />
                                     Deleting...
                                 </>
                             ) : (
