@@ -47,6 +47,19 @@ export function useInfiniteScroll(
   const triggerRef = useRef<ScrollTrigger | null>(null);
   const snapTimeRef = useRef<((offset: number) => number) | null>(null);
 
+  // const resetReferences = () => {
+  //   iterationRef.current = 0;
+  //   timelineRef.current = null;
+  //   scrubTweenRef.current = null;
+  //   triggerRef.current = null;
+  //   snapTimeRef.current = null;
+  //   setIsReady(false);
+  // }
+
+  // if (!isReady) {
+  //   resetReferences();
+  // }
+
   useGSAP(
     () => {
       if (!scrollViewportRef.current && !scrollContentRef.current) return;

@@ -71,7 +71,6 @@ export function InfiniteScroll<T>({
       endDistance,
       showMarkers,
     });
-
   // Ejecutar callback cuando esté listo
   // if (isReady && onReady) {
   //   onReady();

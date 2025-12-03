@@ -92,7 +92,9 @@ export const useMovieStore = create<MovieStore>((set) => ({
             });
             return;
         }
-        set(() => ({
+        set((state) => ({
+            movies: state.movies.filter((movie) => movie.id !== id),
+            selectedMovie: null,
             operationResult: {
                 type: "delete",
                 status: "success",

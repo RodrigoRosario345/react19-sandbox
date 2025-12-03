@@ -31,6 +31,7 @@ export function MovieItemDetail() {
         onClose: clearSelectedMovie,
     });
     const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+    console.log("showDeleteModal:", showDeleteModal);
 
     if (!movie) return null;
 
@@ -151,7 +152,6 @@ export function MovieItemDetail() {
                     itemName={`movie ${movie.title}`}
                     onDelete={async () => {
                         await deleteMovie(movie.id!);
-                        closeModal();
                     }}
                     onClose={() => setShowDeleteModal(false)}
                 />

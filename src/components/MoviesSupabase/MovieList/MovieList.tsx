@@ -7,17 +7,18 @@ import { MovieItem } from "../MovieItem/MovieItem";
 import type { ErrorType, Movie } from "@/interfaces/movie.model";
 import { useMovieStore } from "@/store/movie.store";
 import { MovieItemDetail } from "../MovieItem/MovieItemDetail";
+import { Modal } from "@/components/ui";
 
 export function MovieList() {
     const movies: Movie[] = useMovieStore((state) => state.movies);
     const loading: boolean = useMovieStore((state) => state.loading);
     const error: ErrorType = useMovieStore((state) => state.error);
     const fetchMovies = useMovieStore((state) => state.fetchMovies);
+    const operationResult = useMovieStore((state) => state.operationResult);
 
     useEffect(() => {
-        console.log("fetchMovies called from MovieList");
         fetchMovies();
-    }, [fetchMovies]);
+    }, []);
 
 
     if (loading) return <LoadingSpinner />;
@@ -33,6 +34,7 @@ export function MovieList() {
                 ) : (
                     <>
                         <InfiniteScroll<Movie>
+                            key={movies.length}
                             // Datos
                             items={movies}
                             renderItem={(item, index) => (
@@ -43,6 +45,7 @@ export function MovieList() {
                             animateFunc={carruselInfiniteAnimation}
                         />
                         <MovieItemDetail />
+                        {operationResult && (<Modal {...operationResult} />)}
                     </>
                 )
             }

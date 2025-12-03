@@ -22,8 +22,9 @@ export function DeleteModal({
     const handleDelete = async () => {
         setIsDeleting(true);
         try {
+             closeModal();
             await onDelete();
-            closeModal();
+           
         } catch (error) {
             console.error("Delete failed:", error);
         } finally {
