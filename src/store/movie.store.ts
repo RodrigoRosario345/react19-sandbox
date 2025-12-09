@@ -24,7 +24,7 @@ export const useMovieStore = create<MovieStore>((set) => ({
     addMovie: async (movie) => {
         set({ loading: true, operationResult: null });
 
-        const { error } = await supabase
+        const { data, error } = await supabase
             .from("movies")
             .insert(movie)
             .select()
@@ -42,7 +42,8 @@ export const useMovieStore = create<MovieStore>((set) => ({
             return;
         }
 
-        set(() => ({
+        set((state) => ({
+            movies: [...state.movies, data],
             loading: false,
             operationResult: {
                 type: "add",
@@ -71,7 +72,8 @@ export const useMovieStore = create<MovieStore>((set) => ({
             return;
         }
 
-        set(() => ({
+        set((state) => ({
+            movies: state.movies.map((m) => (m.id === data.id ? data : m)),
             selectedMovie: data,
             operationResult: {
                 type: "edit",

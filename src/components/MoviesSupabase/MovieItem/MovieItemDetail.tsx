@@ -31,7 +31,6 @@ export function MovieItemDetail() {
         onClose: clearSelectedMovie,
     });
     const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
-    console.log("showDeleteModal:", showDeleteModal);
 
     if (!movie) return null;
 

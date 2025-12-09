@@ -3,12 +3,12 @@ import { HelperText, Label, TextInput } from "flowbite-react";
 import type { ComponentProps } from "react";
 import type { FieldValues } from "react-hook-form";
 
-export interface ControllerInputProps<T extends FieldValues> extends BaseControllerProps<T> {
+export interface ControllerInputProps<T extends FieldValues, TT> extends BaseControllerProps<T, TT> {
     type?: ComponentProps<typeof TextInput>["type"];
     placeholder?: string;
 }
 
-export function ControllerInput<T extends FieldValues>({
+export function ControllerInput<T extends FieldValues, TT>({
     name,
     label,
     control,
@@ -18,7 +18,7 @@ export function ControllerInput<T extends FieldValues>({
     helperText,
     required = false,
     className,
-}: ControllerInputProps<T>) {
+}: ControllerInputProps<T, TT>) {
     const { field, error, hasError, colorState } = useControllerField(name, control, required)
 
     return (

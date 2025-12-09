@@ -1,7 +1,7 @@
 import { ControllerInput } from "@/components/ui/form/ControllerInput";
 import { ControllerSelect } from "@/components/ui/form/ControllerSelect";
 import { ControllerTextarea } from "@/components/ui/form/ControllerTextarea";
-import { MOVIE_GENRES, schemaMovie, type MovieSchema } from "@/interfaces/movie.model";
+import { MOVIE_GENRES, schemaMovie, type MovieSchemaInput, type MovieSchemaOutput } from "@/interfaces/movie.model";
 import { useMovieStore } from "@/store/movie.store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "flowbite-react";
@@ -11,26 +11,19 @@ import { useNavigate } from "react-router-dom";
 
 export function MovieCreateForm() {
     const addMovie = useMovieStore((state) => state.addMovie)
-    const { control, handleSubmit } = useForm<MovieSchema>({
+    const { control, handleSubmit, watch } = useForm<MovieSchemaInput, any, MovieSchemaOutput>({
         mode: "onChange",
         resolver: zodResolver(schemaMovie),
     });
     const navigate = useNavigate();
 
     const goBack = () => navigate(-1);
-    const onSubmit = async (data: MovieSchema) => {
+    const onSubmit = async (data: MovieSchemaOutput) => {
         console.log(data);
-        await addMovie(
-            {
-                ...data,
-                release_year: +data.release_year!,
-                duration_minutes: +data.duration_minutes!,
-                rating: +data.rating!
-            }
-        );
-        console.log("send data");
+        await addMovie(data);
         goBack();
     };
+    console.log("watch:", watch());
 
     return (
         <div className="font-sans">
@@ -46,7 +39,7 @@ export function MovieCreateForm() {
                 onSubmit={handleSubmit(onSubmit)}
             >
                 <h1 className="text-lg font-semibold text-white">Create New Movie</h1>
-                <ControllerInput<MovieSchema>
+                <ControllerInput<MovieSchemaInput, MovieSchemaOutput>
                     control={control}
                     name="title"
                     label="Title"
@@ -56,26 +49,26 @@ export function MovieCreateForm() {
                 //     minLength: { value: 3, message: "Title must be at least 3 characters long" }
                 // }}
                 />
-                <ControllerTextarea<MovieSchema>
+                <ControllerTextarea<MovieSchemaInput, MovieSchemaOutput>
                     control={control}
                     name="description"
                     label="Description"
                     placeholder="Enter movie description"
                 />
-                <ControllerInput<MovieSchema>
+                <ControllerInput<MovieSchemaInput, MovieSchemaOutput>
                     control={control}
                     name="director"
                     label="Director"
                     placeholder="Enter movie director"
                 />
                 <div className="flex gap-2.5">
-                    <ControllerInput<MovieSchema>
+                    <ControllerInput<MovieSchemaInput, MovieSchemaOutput>
                         control={control}
                         name="release_year"
                         label="Release Year"
                         placeholder="Enter movie release year"
                     />
-                    <ControllerInput<MovieSchema>
+                    <ControllerInput<MovieSchemaInput, MovieSchemaOutput>
                         control={control}
                         name="duration_minutes"
                         label="Duration Minutes"
@@ -87,13 +80,13 @@ export function MovieCreateForm() {
                     />
                 </div>
                 <div className="flex gap-2.5">
-                    <ControllerInput<MovieSchema>
+                    <ControllerInput<MovieSchemaInput, MovieSchemaOutput>
                         control={control}
                         name="rating"
                         label="Rating"
                         placeholder="Enter movie rating"
                     />
-                    <ControllerSelect<MovieSchema>
+                    <ControllerSelect<MovieSchemaInput, MovieSchemaOutput>
                         control={control}
                         name="genre"
                         label="Genre"
@@ -101,19 +94,19 @@ export function MovieCreateForm() {
                         options={MOVIE_GENRES}
                     />
                 </div>
-                <ControllerInput<MovieSchema>
+                <ControllerInput<MovieSchemaInput, MovieSchemaOutput>
                     control={control}
                     name="background_url"
                     label="Background URL"
                     placeholder="Enter movie background URL"
                 />
-                <ControllerInput<MovieSchema>
+                <ControllerInput<MovieSchemaInput, MovieSchemaOutput>
                     control={control}
                     name="poster_url"
                     label="Poster URL"
                     placeholder="Enter movie poster URL"
                 />
-                <ControllerInput<MovieSchema>
+                <ControllerInput<MovieSchemaInput, MovieSchemaOutput>
                     control={control}
                     name="trailer_url"
                     label="Trailer URL"

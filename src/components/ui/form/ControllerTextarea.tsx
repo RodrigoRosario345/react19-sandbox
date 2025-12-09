@@ -2,13 +2,13 @@ import { useControllerField, type BaseControllerProps } from "@/hooks";
 import { HelperText, Label, Textarea } from "flowbite-react";
 import type { FieldValues } from "react-hook-form";
 
-export interface ControllerTextareaProps<T extends FieldValues>
-    extends BaseControllerProps<T> {
+export interface ControllerTextareaProps<T extends FieldValues, TT>
+    extends BaseControllerProps<T, TT> {
     placeholder?: string;
     rows?: number;
 }
 
-export function ControllerTextarea<T extends FieldValues>({
+export function ControllerTextarea<T extends FieldValues, TT>({
     name,
     label,
     control,
@@ -18,7 +18,7 @@ export function ControllerTextarea<T extends FieldValues>({
     helperText,
     required = false,
     className,
-}: ControllerTextareaProps<T>) {
+}: ControllerTextareaProps<T, TT>) {
     const { field, error, hasError, colorState } = useControllerField(name, control, required);
     return (
         <div className={`flex flex-col gap-2 ${className}`}>

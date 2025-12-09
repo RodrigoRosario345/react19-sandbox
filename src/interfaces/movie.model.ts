@@ -18,7 +18,7 @@ export const MovieGenresArray = [
   "horror",
   "romance",
   "sci-fi",
-  "thriller"
+  "thriller",
 ] as const;
 
 export const schemaMovie = z.object({
@@ -27,19 +27,20 @@ export const schemaMovie = z.object({
     .url("Background URL must be a valid URL")
     .nullable()
     .optional(),
-  description: z.string().nullable().optional(),
+  description: z
+    .string()
+    .transform((val) => val.trim())
+    .nullable()
+    .optional(),
   director: z.string().nullable().optional(),
   duration_minutes: z
     .string()
-    .min(2, "Duration minutes must be at least 2 characters long")
-    .transform((val: string) => parseInt(val))
-    .pipe(
-      z
-        .number("Duration minutes must be a number")
-        .positive("Duration minutes must be a positive number")
-    )
-    .transform((val: number) => val.toString())
+    .regex(/^-?\d+$/, "Duration must be a valid number")
     .nullable()
+    .transform((val: string | null) =>
+      !val || val === "" ? null : parseInt(val)
+    )
+    .pipe(z.number().positive("Must be positive").nullable())
     .optional(),
   genre: z.enum(MovieGenresArray, "Genre must be one of the predefined values"),
   poster_url: z
@@ -48,28 +49,36 @@ export const schemaMovie = z.object({
     .nullable()
     .optional(),
   rating: z
-    .transform((val: string) => parseInt(val))
+    .string()
+    .regex(/^\d+(\.\d)?$/, "Rating must be a valid number")
+    .nullable()
+    .transform((val: string | null) =>
+      !val || val === "" ? null : parseFloat(val)
+    )
     .pipe(
       z
-        .number("Rating must be a number")
+        .number()
         .min(0, "Rating must be at least 0")
         .max(10, "Rating must be at most 10")
+        .nullable()
     )
-    .transform((val: number) => val.toString())
-    .nullable()
     .optional(),
   release_year: z
-    .transform((val: string) => +val)
-    .pipe(
-      z
-        .number("Release year must be a number")
-        .positive("Release year must be a positive number")
-    )
-    .transform((val: number) => val.toString())
-    .pipe(z.string().length(4, "Release year must be at least 4 characters long"))
+    .string()
+    .regex(/^-?\d+$/, "Release year must be a valid number")
+    .length(4, "Release year must be 4 characters long")
     .nullable()
+    .transform((val: string | null) =>
+      !val || val === "" ? null : parseInt(val)
+    )
+    .pipe(
+      z.number().positive("Release year must be a positive number").nullable()
+    )
     .optional(),
-  title: z.string("The field title is required").min(3, "Title must be at least 3 characters long"),
+  title: z
+    .string("The field title is required")
+    .min(3, "Title must be at least 3 characters long")
+    .transform((val) => val.trim()),
   trailer_url: z
     .string()
     .url("Trailer URL must be a valid URL")
@@ -77,7 +86,7 @@ export const schemaMovie = z.object({
     .optional(),
 });
 
-export type MovieGenre = typeof MovieGenresArray[number];
+export type MovieGenre = (typeof MovieGenresArray)[number];
 
 export const MOVIE_GENRES: SelectOption<MovieGenre>[] = [
   { value: "action", label: "Action" },
@@ -90,6 +99,8 @@ export const MOVIE_GENRES: SelectOption<MovieGenre>[] = [
 ];
 
 export type MovieSchema = z.infer<typeof schemaMovie>;
+export type MovieSchemaInput = z.input<typeof schemaMovie>;
+export type MovieSchemaOutput = z.output<typeof schemaMovie>;
 
 export interface OperationResult {
   type?: "add" | "edit" | "delete";

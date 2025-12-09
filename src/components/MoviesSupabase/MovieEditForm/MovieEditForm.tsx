@@ -1,7 +1,7 @@
 import { ControllerInput } from "@/components/ui";
 import { ControllerSelect } from "@/components/ui/form/ControllerSelect";
 import { ControllerTextarea } from "@/components/ui/form/ControllerTextarea";
-import { MOVIE_GENRES, schemaMovie, type MovieSchema } from "@/interfaces/movie.model";
+import { MOVIE_GENRES, schemaMovie, type MovieSchema, type MovieSchemaInput, type MovieSchemaOutput } from "@/interfaces/movie.model";
 import { useMovieStore } from "@/store/movie.store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "flowbite-react";
@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 export function MovieEditForm() {
     const movie = useMovieStore((state) => state.selectedMovie);
     const updateMovie = useMovieStore((state) => state.updateMovie)
-    const { control, handleSubmit } = useForm<MovieSchema>({
+    const { control, handleSubmit } = useForm<MovieSchemaInput, any, MovieSchema>({
         mode: "onChange",
         resolver: zodResolver(schemaMovie),
         defaultValues: {
@@ -58,33 +58,33 @@ export function MovieEditForm() {
                 onSubmit={handleSubmit(onSubmit)}
             >
                 <h1 className="text-lg font-semibold text-white">Edit Movie</h1>
-                <ControllerInput<MovieSchema>
+                <ControllerInput<MovieSchemaInput, MovieSchemaOutput>
                     control={control}
                     name="title"
                     label="Title"
                     placeholder="Enter movie title"
                     required
                 />
-                <ControllerTextarea<MovieSchema>
+                <ControllerTextarea<MovieSchemaInput, MovieSchemaOutput>
                     control={control}
                     name="description"
                     label="Description"
                     placeholder="Enter movie description"
                 />
-                <ControllerInput<MovieSchema>
+                <ControllerInput<MovieSchemaInput, MovieSchemaOutput>
                     control={control}
                     name="director"
                     label="Director"
                     placeholder="Enter movie director"
                 />
                 <div className="flex gap-2.5">
-                    <ControllerInput<MovieSchema>
+                    <ControllerInput<MovieSchemaInput, MovieSchemaOutput>
                         control={control}
                         name="release_year"
                         label="Release Year"
                         placeholder="Enter movie release year"
                     />
-                    <ControllerInput<MovieSchema>
+                    <ControllerInput<MovieSchemaInput, MovieSchemaOutput>
                         control={control}
                         name="duration_minutes"
                         label="Duration Minutes"
@@ -92,13 +92,13 @@ export function MovieEditForm() {
                     />
                 </div>
                 <div className="flex gap-2.5">
-                    <ControllerInput<MovieSchema>
+                    <ControllerInput<MovieSchemaInput, MovieSchemaOutput>
                         control={control}
                         name="rating"
                         label="Rating"
                         placeholder="Enter movie rating"
                     />
-                    <ControllerSelect<MovieSchema>
+                    <ControllerSelect<MovieSchemaInput, MovieSchemaOutput>
                         control={control}
                         name="genre"
                         label="Genre"
@@ -106,19 +106,19 @@ export function MovieEditForm() {
                         options={MOVIE_GENRES}
                     />
                 </div>
-                <ControllerInput<MovieSchema>
+                <ControllerInput<MovieSchemaInput, MovieSchemaOutput>
                     control={control}
                     name="background_url"
                     label="Background URL"
                     placeholder="Enter movie background URL"
                 />
-                <ControllerInput<MovieSchema>
+                <ControllerInput<MovieSchemaInput, MovieSchemaOutput>
                     control={control}
                     name="poster_url"
                     label="Poster URL"
                     placeholder="Enter movie poster URL"
                 />
-                <ControllerInput<MovieSchema>
+                <ControllerInput<MovieSchemaInput, MovieSchemaOutput>
                     control={control}
                     name="trailer_url"
                     label="Trailer URL"

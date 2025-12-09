@@ -3,13 +3,13 @@ import type { SelectOption } from "@/interfaces/input";
 import { HelperText, Label, Select } from "flowbite-react";
 import type { FieldValues } from "react-hook-form";
 
-export interface ControllerSelectProps<T extends FieldValues>
-    extends BaseControllerProps<T> {
+export interface ControllerSelectProps<T extends FieldValues, TT>
+    extends BaseControllerProps<T, TT> {
     options: SelectOption[];
     placeholder?: string;
 }
 
-export function ControllerSelect<T extends FieldValues>({
+export function ControllerSelect<T extends FieldValues, TT>({
     name,
     label,
     control,
@@ -19,7 +19,7 @@ export function ControllerSelect<T extends FieldValues>({
     helperText,
     required = false,
     className,
-}: ControllerSelectProps<T>) {
+}: ControllerSelectProps<T, TT>) {
     const { field, error, hasError, colorState } = useControllerField(
         name,
         control,
