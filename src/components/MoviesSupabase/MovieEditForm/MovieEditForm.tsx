@@ -1,7 +1,7 @@
 import { ControllerInput } from "@/components/ui";
 import { ControllerSelect } from "@/components/ui/form/ControllerSelect";
 import { ControllerTextarea } from "@/components/ui/form/ControllerTextarea";
-import { MOVIE_GENRES, schemaMovie, type MovieSchema, type MovieSchemaInput, type MovieSchemaOutput } from "@/interfaces/movie.model";
+import { MOVIE_GENRES, schemaMovie, type Movie, type MovieSchema, type MovieSchemaInput, type MovieSchemaOutput } from "@/interfaces/movie.model";
 import { useMovieStore } from "@/store/movie.store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "flowbite-react";
@@ -9,38 +9,36 @@ import { useForm } from "react-hook-form";
 import { HiOutlineArrowLeft } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 
+function prepareDefaultValues(movie: Movie | null): MovieSchemaInput {
+    return {
+        title: movie?.title || "",
+        description: movie?.description || "",
+        director: movie?.director || "",
+        release_year: movie?.release_year?.toString() || "",
+        duration_minutes: movie?.duration_minutes?.toString() || "",
+        rating: movie?.rating?.toString() || "",
+        genre: movie?.genre?.toLocaleLowerCase() as MovieSchema["genre"] || "",
+        background_url: movie?.background_url || "",
+        poster_url: movie?.poster_url || "",
+        trailer_url: movie?.trailer_url || "",
+    };
+}
+
 export function MovieEditForm() {
     const movie = useMovieStore((state) => state.selectedMovie);
     const updateMovie = useMovieStore((state) => state.updateMovie)
     const { control, handleSubmit } = useForm<MovieSchemaInput, any, MovieSchema>({
         mode: "onChange",
         resolver: zodResolver(schemaMovie),
-        defaultValues: {
-            title: movie?.title || "",
-            description: movie?.description || "",
-            director: movie?.director || "",
-            release_year: movie?.release_year?.toString() || "",
-            duration_minutes: movie?.duration_minutes?.toString() || "",
-            rating: movie?.rating?.toString() || "",
-            genre: movie?.genre?.toLocaleLowerCase() as MovieSchema["genre"] || "",
-            background_url: movie?.background_url || "",
-            poster_url: movie?.poster_url || "",
-            trailer_url: movie?.trailer_url || "",
-        },
+        defaultValues: prepareDefaultValues(movie)
     });
     const navigate = useNavigate();
 
     const goBack = () => navigate(-1);
-    const onSubmit = async (data: MovieSchema) => {
+    const onSubmit = async (data: MovieSchemaOutput) => {
         console.log(data);
         if (!movie) return;
-        await updateMovie({
-            ...data,
-            id: movie.id,
-            release_year: +data.release_year!,
-            duration_minutes: +data.duration_minutes!,
-            rating: +data.rating!
-        });
+        await updateMovie(movie.id, data);
         goBack();
     };
 

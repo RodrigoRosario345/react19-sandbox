@@ -11,24 +11,19 @@ export interface DeleteModalProps {
     onClose: () => void;
 }
 
-export function DeleteModal({
-    itemName,
-    onDelete,
-    onClose,
-}: DeleteModalProps) {
+export function DeleteModal({ itemName, onDelete, onClose }: DeleteModalProps) {
     const [isDeleting, setIsDeleting] = useState(false);
     const { backdropRef, modalRef, closeModal } = useModal({ onClose });
 
     const handleDelete = async () => {
         setIsDeleting(true);
         try {
-             closeModal();
             await onDelete();
-           
         } catch (error) {
             console.error("Delete failed:", error);
         } finally {
             setIsDeleting(false);
+            closeModal();
         }
     };
 
@@ -59,7 +54,6 @@ export function DeleteModal({
                     >
                         <IoClose className="size-7" />
                     </Button>
-
 
                     {/* Icon */}
                     <div className="text-7xl mx-auto text-red-600">
@@ -94,15 +88,15 @@ export function DeleteModal({
                         <Button
                             parentMethod={handleDelete}
                             disabled={isDeleting}
-                            className="flex-1 rounded-md bg-red-600 hover:bg-red-700 text-white"
+                            className="flex-1 flex gap-2 items-center justify-center rounded-md bg-red-600 hover:bg-red-700 text-white"
                         >
                             {isDeleting ? (
                                 <>
                                     <Spinner
                                         size="sm"
                                         aria-label="Info spinner example"
-                                        className="me-3"
-                                        light
+                                        color="gray"
+                                        className="-mt-1"
                                     />
                                     Deleting...
                                 </>

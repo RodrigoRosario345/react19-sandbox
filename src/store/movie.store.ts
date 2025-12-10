@@ -52,12 +52,12 @@ export const useMovieStore = create<MovieStore>((set) => ({
             },
         }));
     },
-    updateMovie: async (movie) => {
+    updateMovie: async (id, movie) => {
 
         const { data, error } = await supabase
             .from("movies")
             .update(movie)
-            .eq("id", movie.id!)
+            .eq("id", id)
             .select()
             .single();
 

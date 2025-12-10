@@ -17,6 +17,8 @@ export function MovieList() {
     const operationResult = useMovieStore((state) => state.operationResult);
 
     useEffect(() => {
+        if (movies.length != 0) return;
+        console.log("fetch movies called from movie list");
         fetchMovies();
     }, []);
 

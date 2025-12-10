@@ -7,6 +7,7 @@ export interface InfiniteScrollProps<T> {
   // Datos
   items: T[];
   renderItem: (item: T, index: number) => ReactNode;
+  posInitItem?: number;
 
   // Animación
   animateFunc: AnimateFunction<HTMLElement>;
@@ -60,6 +61,7 @@ export function InfiniteScroll<T>({
   onNext,
   onPrevious,
   children,
+  posInitItem = 0,
 }: InfiniteScrollProps<T>) {
   const { scrollViewportRef, scrollContentRef, handleNext, handlePrevious, isReady } =
     useInfiniteScroll({
@@ -70,6 +72,7 @@ export function InfiniteScroll<T>({
       startDistance,
       endDistance,
       showMarkers,
+      posInitItem,
     });
   // Ejecutar callback cuando esté listo
   // if (isReady && onReady) {

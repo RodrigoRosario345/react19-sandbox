@@ -16,6 +16,7 @@ interface UseInfiniteScrollOptions {
   startDistance?: string | number;
   endDistance?: string;
   showMarkers?: boolean;
+  posInitItem?: number;
 }
 
 /**
@@ -33,6 +34,7 @@ export function useInfiniteScroll(
     startDistance = 0,
     endDistance = "+=3000px",
     showMarkers = false,
+    posInitItem = 0,
   } = options;
 
   const scrollViewportRef = useRef<HTMLDivElement | null>(null);
@@ -84,10 +86,12 @@ export function useInfiniteScroll(
       snapTimeRef.current = gsap.utils.snap(spacing);
 
       // Construir el seamless loop
-      timelineRef.current = buildSeamlessLoop(items, spacing, animateFunc);
+      timelineRef.current = buildSeamlessLoop(items, spacing, animateFunc, posInitItem);
 
       // Crear el scrub tween
       scrubTweenRef.current = createScrubTween(timelineRef.current);
+
+      
 
       // Crear el ScrollTrigger
       triggerRef.current = createInfiniteScrollTrigger({

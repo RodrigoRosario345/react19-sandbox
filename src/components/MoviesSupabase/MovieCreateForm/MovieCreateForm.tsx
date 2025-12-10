@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 export function MovieCreateForm() {
     const addMovie = useMovieStore((state) => state.addMovie)
-    const { control, handleSubmit, watch } = useForm<MovieSchemaInput, any, MovieSchemaOutput>({
+    const { control, handleSubmit } = useForm<MovieSchemaInput, any, MovieSchemaOutput>({
         mode: "onChange",
         resolver: zodResolver(schemaMovie),
     });
@@ -23,7 +23,6 @@ export function MovieCreateForm() {
         await addMovie(data);
         goBack();
     };
-    console.log("watch:", watch());
 
     return (
         <div className="font-sans">

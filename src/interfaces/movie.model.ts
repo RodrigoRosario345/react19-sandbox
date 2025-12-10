@@ -120,7 +120,7 @@ export interface MovieStore {
   // Acciones
   fetchMovies: () => Promise<void>;
   addMovie: (movie: MovieInsert) => Promise<void>;
-  updateMovie: (movie: MovieUpdate) => Promise<void>;
+  updateMovie: (id: string, movie: MovieUpdate) => Promise<void>;
   deleteMovie: (id: string) => Promise<void>;
   setSelectedMovie: (movie: Movie | null) => void;
   clearSelectedMovie: () => void;

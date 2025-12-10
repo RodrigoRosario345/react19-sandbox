@@ -11,7 +11,8 @@ import type { AnimateFunction, GSAPTimeline } from "@/types/infiniteScroll";
 export function buildSeamlessLoop<T extends HTMLElement>(
   items: T[],
   spacing: number,
-  animateFunc: AnimateFunction<T>
+  animateFunc: AnimateFunction<T>,
+  posInitItem: number
 ): GSAPTimeline {
   const overlap = Math.ceil(1 / spacing);
   const startTime = items.length * spacing + 0.5;
@@ -32,16 +33,16 @@ export function buildSeamlessLoop<T extends HTMLElement>(
   for (let i = 0; i < totalIterations; i++) {
     const index = i % items.length;
     const time = +(i * spacing).toFixed(1);
-    // console.log("Adding animation for item", index, "at time", time);
+    console.log("Adding animation for item", index, "at time", time);
     rawSequence.add(animateFunc(items[index]), time);
 
-    if (i <= items.length) {
-      seamlessLoop.add("label" + i, time);
-    }
+    // if (i <= items.length) {
+    //   seamlessLoop.add("label" + i, time);
+    // }
   }
 
   // console.log({ startTime, loopTime });
-  rawSequence.time(startTime);
+  rawSequence.time(startTime + (posInitItem * spacing));
 
   seamlessLoop
     .to(rawSequence, {
