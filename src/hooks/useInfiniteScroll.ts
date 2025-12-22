@@ -8,7 +8,8 @@ import type { AnimateFunction, UseInfiniteScrollReturn, GSAPTimeline, GSAPTween,
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-interface UseInfiniteScrollOptions {
+interface UseInfiniteScrollOptions<T> {
+  items: T[];
   spacing?: number;
   animateFunc: AnimateFunction<HTMLElement>;
   itemSelector: string;
@@ -18,15 +19,15 @@ interface UseInfiniteScrollOptions {
   showMarkers?: boolean;
   posInitItem?: number;
 }
-
 /**
  * Hook personalizado para manejar el infinite scroll con GSAP
  * Encapsula toda la lógica de animación, ScrollTrigger y navegación
  */
-export function useInfiniteScroll(
-  options: UseInfiniteScrollOptions
+export function useInfiniteScroll<T>(
+  options: UseInfiniteScrollOptions<T>
 ): UseInfiniteScrollReturn {
   const {
+    items,
     spacing = 0.1,
     animateFunc,
     itemSelector,
@@ -34,7 +35,6 @@ export function useInfiniteScroll(
     startDistance = 0,
     endDistance = "+=3000px",
     showMarkers = false,
-    posInitItem = 0,
   } = options;
 
   const scrollViewportRef = useRef<HTMLDivElement | null>(null);
@@ -49,22 +49,11 @@ export function useInfiniteScroll(
   const triggerRef = useRef<ScrollTrigger | null>(null);
   const snapTimeRef = useRef<((offset: number) => number) | null>(null);
 
-  // const resetReferences = () => {
-  //   iterationRef.current = 0;
-  //   timelineRef.current = null;
-  //   scrubTweenRef.current = null;
-  //   triggerRef.current = null;
-  //   snapTimeRef.current = null;
-  //   setIsReady(false);
-  // }
-
-  // if (!isReady) {
-  //   resetReferences();
-  // }
-
   useGSAP(
     () => {
       if (!scrollViewportRef.current && !scrollContentRef.current) return;
+
+      console.log("Initializing Infinite Scroll Hook");
 
       const querySelectorAll = gsap.utils.selector(scrollContentRef);
       const items = querySelectorAll<HTMLElement>(itemSelector);
@@ -81,17 +70,14 @@ export function useInfiniteScroll(
         // Setup por defecto
         gsap.set(items, { xPercent: 400, opacity: 0, scale: 0 });
       }
-
       // Crear snap function
       snapTimeRef.current = gsap.utils.snap(spacing);
 
       // Construir el seamless loop
-      timelineRef.current = buildSeamlessLoop(items, spacing, animateFunc, posInitItem);
+      timelineRef.current = buildSeamlessLoop(items, spacing, animateFunc);
 
       // Crear el scrub tween
       scrubTweenRef.current = createScrubTween(timelineRef.current);
-
-      
 
       // Crear el ScrollTrigger
       triggerRef.current = createInfiniteScrollTrigger({
@@ -108,7 +94,7 @@ export function useInfiniteScroll(
 
       setIsReady(true);
     },
-    { dependencies: [], scope: scrollViewportRef }
+    { dependencies: [items.length], scope: scrollViewportRef }
   );
 
   const handleNext = () => {
@@ -139,11 +125,42 @@ export function useInfiniteScroll(
     });
   };
 
+  const handleMoveToItem = (itemIndex: number) => {
+    if (!scrubTweenRef.current || !timelineRef.current || !triggerRef.current || !snapTimeRef.current) {
+      return;
+    }
+
+    const targetTime = itemIndex * spacing;
+    const snappedTime = snapTimeRef.current(targetTime);
+
+    console.log("Moving to item index:", itemIndex, "at time:", snappedTime, "iterationRef:", iterationRef.current);
+
+    scrollToOffset({
+      totalTime: snappedTime,
+      currentIterationRef: iterationRef,
+      loopTimeline: timelineRef.current,
+      scrubTween: scrubTweenRef.current,
+      trigger: triggerRef.current,
+    });
+  }
+
+  const reseatRefs = () => {
+    timelineRef.current = null;
+    scrubTweenRef.current = null;
+    triggerRef.current = null;
+    snapTimeRef.current = null;
+    iterationRef.current = 0;
+    setIsReady(false);
+  };
+
   return {
     scrollViewportRef,
     scrollContentRef,
+    triggerRef: triggerRef.current,
     handleNext,
     handlePrevious,
+    handleMoveToItem,
     isReady,
+    reseatRefs,
   };
 }

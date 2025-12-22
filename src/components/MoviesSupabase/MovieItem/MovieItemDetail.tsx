@@ -150,6 +150,7 @@ export function MovieItemDetail() {
                 <DeleteModal
                     itemName={`movie ${movie.title}`}
                     onDelete={async () => {
+                        
                         await deleteMovie(movie.id!);
                     }}
                     onClose={() => setShowDeleteModal(false)}

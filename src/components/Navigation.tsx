@@ -1,10 +1,12 @@
 import { Link, useLocation } from "react-router-dom";
 import { ROUTES, ROUTE_METADATA } from "@/routes/routes.constants";
+import { useEffect } from "react";
 
 interface NavigationLink {
   path: string;
   label: string;
   icon: string;
+  onClick?: () => void;
 }
 
 const navigationLinks: NavigationLink[] = [
@@ -32,11 +34,20 @@ const navigationLinks: NavigationLink[] = [
     path: ROUTES.PLANETS,
     label: ROUTE_METADATA[ROUTES.PLANETS].title,
     icon: "🌍",
+    onClick: () => {
+      localStorage.removeItem("nextTime");
+      localStorage.removeItem("nextSnappedTime");
+      localStorage.removeItem("currentIteration");
+    },
   },
+
 ];
 
 function Navigation(): React.JSX.Element {
   const location = useLocation();
+
+
+
   return (
     <nav className="sticky top-0 left-0 w-full py-2.5 bg-black/50 backdrop-blur-xs z-10 flex justify-center gap-6 font-saiyan">
       {navigationLinks.map((link: NavigationLink) => {
@@ -53,6 +64,7 @@ function Navigation(): React.JSX.Element {
                 : "relative before:transition-all before:duration-200 before:absolute before:m-auto before:w-0 before:inset-0 before:border-b-2 before:border-orange-300 hover:before:w-full hover:text-orange-300 text-orange-100"
               }
             `}
+            onClick={link.onClick}
           >
             {/* <span className="text-xl">{link.icon}</span> */}
             <span className="font-bold text-lg tracking-wider">

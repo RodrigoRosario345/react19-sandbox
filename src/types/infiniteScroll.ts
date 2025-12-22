@@ -75,7 +75,10 @@ export interface WrapBackwardConfig {
 export interface UseInfiniteScrollReturn {
   scrollViewportRef: React.RefObject<HTMLDivElement | null>;
   scrollContentRef: React.RefObject<HTMLDivElement | null>;
+  triggerRef: ScrollTrigger | null;
   handleNext: () => void;
   handlePrevious: () => void;
+  handleMoveToItem: (index: number) => void;
   isReady: boolean;
+  reseatRefs: () => void;
 }

@@ -36,13 +36,14 @@ export function MovieList() {
                 ) : (
                     <>
                         <InfiniteScroll<Movie>
-                            key={movies.length}
                             // Datos
+                            key={movies.length}
                             items={movies}
-                            renderItem={(item, index) => (
-                                <MovieItem movie={item} key={index} />
+                            renderItem={(item, index, handleMoveToItem) => (
+                                <MovieItem movie={item} key={index} onMoveToItem={handleMoveToItem} />
                             )}
                             // Animación
+                            
                             spacing={0.1}
                             animateFunc={carruselInfiniteAnimation}
                         />

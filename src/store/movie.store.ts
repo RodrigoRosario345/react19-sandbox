@@ -16,7 +16,7 @@ export const useMovieStore = create<MovieStore>((set) => ({
             set({ error, loading: false });
             return;
         }
-        console.log("data received:", data);
+        
         set({ movies: data ?? [], loading: false });
     },
     setSelectedMovie: (movie) => set({ selectedMovie: movie }),

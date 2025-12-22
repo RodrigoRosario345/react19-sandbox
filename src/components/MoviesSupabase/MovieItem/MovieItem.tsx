@@ -4,12 +4,14 @@ import { useMovieStore } from "@/store/movie.store";
 
 interface MovieItemProps {
     movie: Movie;
+    onMoveToItem: () => void;
 }
 
-export function MovieItem({ movie }: MovieItemProps) {
+export function MovieItem({ movie, onMoveToItem }: MovieItemProps) {
     const setSelectedMovie = useMovieStore((state) => state.setSelectedMovie);
 
     const toggleDetail = () => {
+        // onMoveToItem();
         setSelectedMovie(movie);
     };
 

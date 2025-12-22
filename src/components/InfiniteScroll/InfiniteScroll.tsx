@@ -6,7 +6,7 @@ import { NavigationControls } from "./NavigationControls";
 export interface InfiniteScrollProps<T> {
   // Datos
   items: T[];
-  renderItem: (item: T, index: number) => ReactNode;
+  renderItem: (item: T, index: number, handleMoveToItem: () => void) => ReactNode;
   posInitItem?: number;
 
   // Animación
@@ -63,8 +63,9 @@ export function InfiniteScroll<T>({
   children,
   posInitItem = 0,
 }: InfiniteScrollProps<T>) {
-  const { scrollViewportRef, scrollContentRef, handleNext, handlePrevious, isReady } =
-    useInfiniteScroll({
+  const { scrollViewportRef, scrollContentRef, triggerRef, handleNext, handlePrevious, handleMoveToItem, isReady } =
+    useInfiniteScroll<T>({
+      items,
       spacing,
       animateFunc,
       itemSelector: `.${itemClassName}`,
@@ -75,8 +76,8 @@ export function InfiniteScroll<T>({
       posInitItem,
     });
   // Ejecutar callback cuando esté listo
-  // if (isReady && onReady) {
-  //   onReady();
+  // if (isReady) {
+
   // }
 
   const handleNextClick = () => {
@@ -95,7 +96,7 @@ export function InfiniteScroll<T>({
         <div className={itemsWrapperClassName}>
           {items.map((item, index) => (
             <div key={index} className={`${itemClassName} w-full h-[95%] rounded-2xl absolute top-[2.5%] left-0`}>
-              {renderItem(item, index)}
+              {renderItem(item, index, () => handleMoveToItem(index))}
             </div>
           ))}
           {showNavigation && (

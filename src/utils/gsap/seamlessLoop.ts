@@ -12,7 +12,6 @@ export function buildSeamlessLoop<T extends HTMLElement>(
   items: T[],
   spacing: number,
   animateFunc: AnimateFunction<T>,
-  posInitItem: number
 ): GSAPTimeline {
   const overlap = Math.ceil(1 / spacing);
   const startTime = items.length * spacing + 0.5;
@@ -33,7 +32,7 @@ export function buildSeamlessLoop<T extends HTMLElement>(
   for (let i = 0; i < totalIterations; i++) {
     const index = i % items.length;
     const time = +(i * spacing).toFixed(1);
-    console.log("Adding animation for item", index, "at time", time);
+    // console.log("Adding animation for item", index, "at time", time);
     rawSequence.add(animateFunc(items[index]), time);
 
     // if (i <= items.length) {
@@ -42,7 +41,7 @@ export function buildSeamlessLoop<T extends HTMLElement>(
   }
 
   // console.log({ startTime, loopTime });
-  rawSequence.time(startTime + (posInitItem * spacing));
+  rawSequence.time(startTime);
 
   seamlessLoop
     .to(rawSequence, {
@@ -73,7 +72,7 @@ export function buildSeamlessLoop<T extends HTMLElement>(
  */
 export function createScrubTween(
   loopTimeline: GSAPTimeline,
-  duration: number = 0.5,
+  duration: number = 0,
   ease: string | gsap.EaseFunction = "power3"
 ): gsap.core.Tween {
   return gsap.to(loopTimeline, {
@@ -81,5 +80,6 @@ export function createScrubTween(
     duration,
     ease,
     paused: true,
+
   });
 }

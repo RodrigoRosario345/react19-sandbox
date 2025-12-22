@@ -6,6 +6,7 @@ import type {
   WrapBackwardConfig,
 } from "@/types/infiniteScroll";
 
+
 /**
  * Hace wrap hacia adelante cuando el ScrollTrigger llega al final
  */
@@ -60,6 +61,7 @@ export function createInfiniteScrollTrigger(
     showMarkers = false,
     scrollerSelector,
   } = config;
+  let isInitializing = true;
 
   return ScrollTrigger.create({
     start: startDistance,
@@ -80,12 +82,24 @@ export function createInfiniteScrollTrigger(
           loopTimeline,
         });
       } else {
-        scrubTween.vars.totalTime = snapTime(
-          (currentIterationRef.current! + self.progress) *
-          loopTimeline.duration()
-        );
+
+        let nextTime: number = snapTime((currentIterationRef.current! + self.progress) * loopTimeline.duration());
+
+        if (isInitializing) {
+          const scrollPosition: number = localStorage.getItem("nextTime") ? parseFloat(localStorage.getItem("nextTime")!) : 0;
+          nextTime = localStorage.getItem("nextSnappedTime") ? parseFloat(localStorage.getItem("nextSnappedTime")!) : nextTime;
+          currentIterationRef.current = localStorage.getItem("currentIteration") ? parseInt(localStorage.getItem("currentIteration")!) : currentIterationRef.current;
+          self.scroll(scrollPosition);
+          isInitializing = false;
+        }
+
+        localStorage.setItem("nextTime", `${self.scroll()}`);
+        localStorage.setItem("nextSnappedTime", `${nextTime}`);
+        localStorage.setItem("currentIteration", `${currentIterationRef.current}`);
+        scrubTween.vars.totalTime = nextTime;
         scrubTween.invalidate().restart();
         selfWithWrapping.wrapping = false;
+        scrubTween.duration(0.5);
       }
     },
   });
@@ -97,7 +111,6 @@ export function createInfiniteScrollTrigger(
 export function scrollToOffset(config: ScrollToOffsetConfig): void {
   const { totalTime, currentIterationRef, loopTimeline, scrubTween, trigger } =
     config;
-
   const timelineDuration = loopTimeline.duration();
   const progress = (totalTime - timelineDuration * currentIterationRef.current!) / timelineDuration;
   const scrollPosition = trigger.start + progress * (trigger.end - trigger.start);
