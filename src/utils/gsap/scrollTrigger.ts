@@ -5,6 +5,7 @@ import type {
   ScrollToOffsetConfig,
   WrapBackwardConfig,
 } from "@/types/infiniteScroll";
+import { useInfiniteScrollStore } from "@/store/InfiniteScroll.store";
 
 
 /**
@@ -62,6 +63,8 @@ export function createInfiniteScrollTrigger(
     scrollerSelector,
   } = config;
   let isInitializing = true;
+  const { setInfiniteScrollState, infiniteScrollState } = useInfiniteScrollStore.getState();
+  const { scrollPosition, nextPosition, currentIteration } = infiniteScrollState;
 
   return ScrollTrigger.create({
     start: startDistance,
@@ -86,20 +89,22 @@ export function createInfiniteScrollTrigger(
         let nextTime: number = snapTime((currentIterationRef.current! + self.progress) * loopTimeline.duration());
 
         if (isInitializing) {
-          const scrollPosition: number = localStorage.getItem("nextTime") ? parseFloat(localStorage.getItem("nextTime")!) : 0;
-          nextTime = localStorage.getItem("nextSnappedTime") ? parseFloat(localStorage.getItem("nextSnappedTime")!) : nextTime;
-          currentIterationRef.current = localStorage.getItem("currentIteration") ? parseInt(localStorage.getItem("currentIteration")!) : currentIterationRef.current;
+          nextTime = nextPosition;
+          currentIterationRef.current = currentIteration;
           self.scroll(scrollPosition);
           isInitializing = false;
         }
-
-        localStorage.setItem("nextTime", `${self.scroll()}`);
-        localStorage.setItem("nextSnappedTime", `${nextTime}`);
-        localStorage.setItem("currentIteration", `${currentIterationRef.current}`);
         scrubTween.vars.totalTime = nextTime;
         scrubTween.invalidate().restart();
         selfWithWrapping.wrapping = false;
         scrubTween.duration(0.5);
+        setInfiniteScrollState(
+          {
+            scrollPosition: self.scroll(),
+            nextPosition: nextTime,
+            currentIteration: currentIterationRef.current!
+          }
+        );
       }
     },
   });

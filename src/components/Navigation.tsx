@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { ROUTES, ROUTE_METADATA } from "@/routes/routes.constants";
-import { useEffect } from "react";
+import { useInfiniteScrollStore } from "@/store/InfiniteScroll.store";
 
 interface NavigationLink {
   path: string;
@@ -24,6 +24,9 @@ const navigationLinks: NavigationLink[] = [
     path: ROUTES.MOVIES,
     label: ROUTE_METADATA[ROUTES.MOVIES].title,
     icon: "🎬",
+    onClick: () => {
+      useInfiniteScrollStore.getState().clearInfiniteScrollState();
+    }
   },
   {
     path: ROUTES.CHARACTERS,
@@ -35,9 +38,7 @@ const navigationLinks: NavigationLink[] = [
     label: ROUTE_METADATA[ROUTES.PLANETS].title,
     icon: "🌍",
     onClick: () => {
-      localStorage.removeItem("nextTime");
-      localStorage.removeItem("nextSnappedTime");
-      localStorage.removeItem("currentIteration");
+      useInfiniteScrollStore.getState().clearInfiniteScrollState();
     },
   },
 
@@ -45,8 +46,6 @@ const navigationLinks: NavigationLink[] = [
 
 function Navigation(): React.JSX.Element {
   const location = useLocation();
-
-
 
   return (
     <nav className="sticky top-0 left-0 w-full py-2.5 bg-black/50 backdrop-blur-xs z-10 flex justify-center gap-6 font-saiyan">
